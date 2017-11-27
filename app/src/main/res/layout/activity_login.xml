@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@mipmap/login_bg"
+    tools:context=".ui.activity.LoginActivity">
+
+<ImageView
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/x150"
+    android:layout_width="@dimen/x180"
+    android:layout_height="@dimen/x180"
+    android:src="@mipmap/logo1"
+    />
+
+
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/bt_wx_login"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/x30"
+            android:paddingLeft="@dimen/x100"
+            android:layout_marginBottom="@dimen/x20"
+            android:textColor="@color/smssdk_white"
+            android:background="@drawable/shape_wx_login_bg"
+            android:drawableLeft="@mipmap/wx_login"
+            android:layout_width="@dimen/x400"
+            android:layout_height="wrap_content"
+            android:text="@string/wx_login_text"
+            />
+        <TextView
+            android:id="@+id/bt_qq_login"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/x100"
+            android:textSize="@dimen/x30"
+            android:textColor="@color/smssdk_white"
+            android:drawableLeft="@mipmap/qq_login"
+            android:background="@drawable/shape_qq_login_bg"
+            android:layout_width="@dimen/x400"
+            android:layout_marginBottom="@dimen/x200"
+            android:layout_height="wrap_content"
+            android:text="@string/qq_login_text"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_other_login"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:textColor="@color/colorLineNarrow"
+        android:layout_height="wrap_content"
+        android:text="@string/other_login2"
+        android:textSize="@dimen/x40"
+        android:layout_marginBottom="@dimen/x100"
+
+        />
+</RelativeLayout>

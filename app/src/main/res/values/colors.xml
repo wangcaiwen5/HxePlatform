@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#19A0EF</color>
+    <color name="colorYellow">#19A0EF</color>
+    <color name="colorPrimaryDark">#19A0EF</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="windowback_color">#ffffff</color>
+    <color name="accent_material_color">#00FF7F</color>
+    <color name="baseColor_title">#19A0EF</color>
+    <color name="blue_8dd">#8DD0F7</color>
+    <color name="textColor_white">#ffffff</color>
+    <color name="textColor_999">#999999</color>
+    <color name="textColor_666">#666666</color>
+    <color name="textColor_333">#333333</color>
+    <color name="touming">#3ffffffc</color>
+    <color name="colorGreen">#5DB254</color>
+    <color name="colorLineNarrow">#cfcfcf</color>
+    <color name="colorLineWide">#999999</color>
+</resources>

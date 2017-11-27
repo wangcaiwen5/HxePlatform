@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">黄小二</string>
+
+
+    <!-- 登录页 -->
+    <string name="prompt_email">Email</string>
+    <string name="code">请输入短信验证码</string>
+    <string name="password">请输入登录密码</string>
+    <string name="phone_tel">请输入手机号码</string>
+    <string name="other_login">使用常规登录方式</string>
+    <string name="msg_code_login">短信验证码登录方式</string>
+    <string name="other_login2">其他登录方式</string>
+    <string name="qq_login_text">QQ登录</string>
+    <string name="wx_login_text">微信登录</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+</resources>

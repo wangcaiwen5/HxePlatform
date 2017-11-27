@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@mipmap/other_login_bg"
+    android:orientation="vertical"
+    tools:context="com.hxe.hxeplatform.ui.activity.OtherLoginActivity">
+
+
+    <ImageView
+        android:layout_width="@dimen/x180"
+        android:layout_height="@dimen/x180"
+        android:layout_marginBottom="@dimen/x100"
+        android:src="@mipmap/logo1"
+        />
+
+       <LinearLayout
+           android:gravity="center"
+           android:orientation="vertical"
+           android:weightSum="3"
+           android:background="@drawable/shape_phone_bg"
+           android:layout_width="match_parent"
+           android:layout_marginRight="@dimen/x60"
+            android:layout_marginLeft="@dimen/x60"
+           android:layout_marginBottom="@dimen/x100"
+           android:layout_height="@dimen/x250">
+           <EditText
+               android:id="@+id/et_password"
+               android:maxLines="1"
+               android:layout_weight="1"
+               android:textColorHint="@color/colorLineNarrow"
+               android:layout_width="@dimen/x550"
+               android:hint="账号"
+               android:layout_height="wrap_content"
+               android:background="@null"
+               />
+
+           <View
+               android:background="@color/colorLineNarrow"
+               android:layout_width="@dimen/x550"
+               android:layout_height="@dimen/x3"></View>
+
+           <EditText
+               android:id="@+id/et_username"
+               android:maxLines="1"
+               android:textColorHint="@color/colorLineNarrow"
+               android:layout_width="@dimen/x550"
+               android:hint="密码"
+               android:layout_weight="1"
+                android:layout_height="wrap_content"
+               android:background="@null"
+               />
+       </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_marginRight="@dimen/x60"
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_login_bt"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/textColor_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="登录"
+            android:background="@drawable/shape_login_bg"
+            />
+
+        <TextView
+            android:id="@+id/tv_update_paw"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_login_bt"
+            android:layout_marginTop="@dimen/x15"
+            android:textColor="@color/textColor_white"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/x35"
+            android:layout_height="wrap_content"
+            android:text="忘记密码"
+            />
+
+    </RelativeLayout>
+
+
+
+    <TextView
+        android:id="@+id/tv_youke"
+        android:gravity="center"
+        android:textSize="@dimen/x45"
+        android:textColor="@color/textColor_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="游客登录"
+        />
+
+
+
+
+</LinearLayout>

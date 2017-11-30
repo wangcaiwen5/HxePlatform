@@ -8,5 +8,6 @@ package com.hxe.hxeplatform.rxretrofit.common;
 
 public class BaseApi {
 
-    public static final String BASE_URL="https://cms.51hxe.com/hy_cms/member/";
+    public static final String BASE_URL= Api.IP;
+
 }

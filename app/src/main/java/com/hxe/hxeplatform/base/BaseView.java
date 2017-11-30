@@ -1,5 +1,7 @@
 package com.hxe.hxeplatform.base;
 
+import okhttp3.ResponseBody;
+
 /**
  * Author:wangcaiwen
  * Time:2017/11/14.
@@ -7,8 +9,9 @@ package com.hxe.hxeplatform.base;
  */
 
 public interface BaseView {
-    void showLoading();
-    void hideLoading();
-    void onSuccess();
-    void onFail();
+    void onSuccess(ResponseBody msg);
+    void onFail(String msg);
+    void ShowProgressBar();
+    void hideProgressBar();
+    void onError(Throwable throwable);
 }

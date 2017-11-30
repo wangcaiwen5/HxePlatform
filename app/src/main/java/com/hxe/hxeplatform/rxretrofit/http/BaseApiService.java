@@ -1,17 +1,23 @@
 package com.hxe.hxeplatform.rxretrofit.http;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
-import retrofit2.http.QueryMap;
+import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * Author:wangcaiwen
@@ -27,10 +33,12 @@ public interface BaseApiService {
      * @param maps
      * @return
      */
-   /* @GET("{url}")
-    Observable<BaseResponse<Object>> executeGet(
-            @Path("url") String url,
-            @QueryMap Map<String, String> maps);*/
+    @POST()
+    @FormUrlEncoded
+    @Headers("Accept:*")
+    Observable<ResponseBody> executePost(
+            @Url String url,
+            @FieldMap Map<String, String> maps);
 
     /**
      * 以json为参数上传
@@ -38,26 +46,21 @@ public interface BaseApiService {
      * @param json
      * @return
      */
-    @POST("{url}")
+    @POST()
    Observable<ResponseBody> jsonData(
-            @Path("url") String url,
+            @Url String url,
             @Body RequestBody json);
 
 
-    /**
-     * 文件上传
-     * @param url
-     * @param body
-     * @return
-     */
-    @Multipart
-    @POST("{url}")
-    Observable<ResponseBody> uploadFile(
-            @Path("url") String url,
-            @Part("image\"; filename=\"image.jpg") RequestBody body);
 
     /**
-     *
+     *多文件上传
      */
+    @Multipart
+    @POST()
+    Observable<ResponseBody> moreFileUpload(@Url String url,
+                                            @Part("description") RequestBody description,
+                                            @Part() List<MultipartBody.Part> parts,
+                                            @Query("uid") String uid);
 
 }

@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:gravity="center"
+            android:layout_marginRight="@dimen/x30"
             android:textColor="#ffffff"
             android:textSize="@dimen/x35"
             android:visibility="visible"/>

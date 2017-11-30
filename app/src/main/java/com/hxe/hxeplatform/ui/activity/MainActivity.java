@@ -1,6 +1,5 @@
 package com.hxe.hxeplatform.ui.activity;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,24 +17,21 @@ import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.bumptech.glide.Glide;
+import com.bwie.uploadpicture.view.CircleImageView;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.MyLeftAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.myview.MyToolBar;
-import com.hxe.hxeplatform.myview.RoundImageView;
 import com.hxe.hxeplatform.ui.fragment.JokesFragment;
-import com.hxe.hxeplatform.ui.fragment.LeftFragment;
 import com.hxe.hxeplatform.ui.fragment.RecommendFragment;
 import com.hxe.hxeplatform.ui.fragment.VideoFragment;
-import com.hxe.hxeplatform.utils.SpaceItemDecoration;
 import com.hxe.hxeplatform.utils.ToastShow;
-import com.squareup.haha.perflib.Main;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
 
@@ -50,11 +46,10 @@ public class MainActivity extends BaseActivity {
     DrawerLayout drawerLayout;
     @BindView(R.id.rl_left_menu)
     RelativeLayout LeftMenu;
-
-    @BindView(R.id.iv_head_portrait)
-    RoundImageView ivHeadPortrait;
     @BindView(R.id.tv_nikename)
     TextView tvNikename;
+    @BindView(R.id.civ_imgView)
+    CircleImageView ivHead;
     @BindView(R.id.iv_gender)
     ImageView ivGender;
     @BindView(R.id.rv_list)
@@ -70,6 +65,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        Glide.with(getApplicationContext()).load("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=311229171,4189910992&fm=27&gp=0.jpg").into(ivHead);
+
         manager = getSupportFragmentManager();
         initView();
         initData();
@@ -106,7 +103,7 @@ public class MainActivity extends BaseActivity {
         mToolbar.setRightTitleClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            ToastShow.getSingleton(MainActivity.this).showToast("暂未开通");
+           gotoActivity(WriteActivity.class,false);
             }
         });
     }

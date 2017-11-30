@@ -4,7 +4,7 @@
     >
        <TextView
         android:gravity="center"
-        android:layout_width="@dimen/x300"
+        android:layout_width="@dimen/x350"
         android:id="@+id/TextViewInfo"
         android:layout_height="@dimen/x50"
         android:textSize="@dimen/x30"

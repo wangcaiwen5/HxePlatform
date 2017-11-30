@@ -18,7 +18,7 @@ import butterknife.Unbinder;
  * Description:
  */
 
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView {
+public abstract class BaseFragment<P extends BasePresenter> extends Fragment  {
 
 
     protected P mPresenter;
@@ -43,25 +43,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     protected abstract int getLayoutid();
 
-    @Override
-    public void showLoading() {
 
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void onSuccess() {
-
-    }
-
-    @Override
-    public void onFail() {
-
-    }
 
     @Override
     public void onDestroy() {

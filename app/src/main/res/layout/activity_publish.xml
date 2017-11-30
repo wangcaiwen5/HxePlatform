@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.hxe.hxeplatform.ui.activity.PublishActivity">
+<com.hxe.hxeplatform.myview.MyToolBar
+    android:id="@+id/m_publishToolbar"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"></com.hxe.hxeplatform.myview.MyToolBar>
+
+
+    <EditText
+        android:id="@+id/et_text"
+        android:background="@null"
+        android:hint="@string/tishi"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x150" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/img_recyclerView"
+        android:layout_marginTop="@dimen/x150"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>

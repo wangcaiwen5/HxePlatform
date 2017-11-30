@@ -1,16 +1,23 @@
 package com.hxe.hxeplatform.ui.activity;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.base.BaseActivity;
+import com.hxe.hxeplatform.base.BaseApplication;
+import com.hxe.hxeplatform.entity.LoginEntity;
+import com.hxe.hxeplatform.mvp.presenter.LoginPresenter;
+import com.hxe.hxeplatform.mvp.view.LoginView;
 import com.hxe.hxeplatform.utils.ToastShow;
 
+import java.io.IOException;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 
 public class OtherLoginActivity extends BaseActivity implements View.OnClickListener{
 
@@ -25,6 +32,8 @@ public class OtherLoginActivity extends BaseActivity implements View.OnClickList
     TextView tvUpdatePaw;
     @BindView(R.id.tv_youke)
     TextView tvYouke;
+    @BindView(R.id.pb_progressbar)
+    ProgressBar progressBar;
 
 
     @Override
@@ -54,7 +63,56 @@ public class OtherLoginActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_login_bt:
-                gotoActivity(MainActivity.class,true);
+                progressBar.setVisibility(View.VISIBLE);
+                System.out.println("============="+etUsername.getText().toString()+"========"+etPassword.getText().toString().trim());
+                LoginPresenter loginPresenter = new LoginPresenter(new LoginView() {
+                    @Override
+                    public void onSuccess(ResponseBody body) {
+                        try {
+                            String string = body.string();
+                            Gson gson = new Gson();
+                            LoginEntity loginEntity = gson.fromJson(string, LoginEntity.class);
+                            String code = loginEntity.code;
+                            String msg1 = loginEntity.msg;
+                            if(code.equals("0")){
+                                ToastShow.getSingleton(BaseApplication.getContext()).showToast(msg1);
+                                gotoActivity(MainActivity.class,true);
+                            }else{
+                                ToastShow.getSingleton(BaseApplication.getContext()).showToast(msg1);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFail(String msg) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        ToastShow.getSingleton(BaseApplication.getContext()).showToast(msg+"");
+                    }
+
+
+
+
+                    @Override
+                    public void hideProgressBar() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void ShowProgressBar() {
+                        System.out.println("显示");
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        System.out.println("=======异常"+throwable);
+                    }
+                });
+
+                loginPresenter.login(etUsername.getText().toString().trim(),etPassword.getText().toString().trim());
                 break;
 
             case R.id.tv_update_paw:
@@ -67,4 +125,6 @@ public class OtherLoginActivity extends BaseActivity implements View.OnClickList
                 break;
         }
     }
+
+
 }

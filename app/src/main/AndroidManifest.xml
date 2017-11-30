@@ -56,6 +56,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.zzti.fengyongge.imagepicker.PhotoSelectorActivity"></activity><!--//选择图片-->
+        <activity android:name="com.zzti.fengyongge.imagepicker.PhotoPreviewActivity"></activity><!--//预览图片-->
         <!-- 短信验证 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -71,7 +73,9 @@
             android:value="510b61ab5b9cddc88cc301d7b2b1595f" />
 
         <activity android:name=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.OtherLoginActivity"></activity>
+        <activity android:name=".ui.activity.OtherLoginActivity" />
+        <activity android:name=".ui.activity.WriteActivity" />
+        <activity android:name=".ui.activity.PublishActivity"></activity>
     </application>
 
 </manifest>

@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
  * Description:
  */
 
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseView {
+public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity {
 
     protected P mPresenter;
 
@@ -113,25 +113,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
 
     }
-    @Override
-    public void showLoading() {
 
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void onSuccess() {
-
-    }
-
-    @Override
-    public void onFail() {
-
-    }
 
 
 

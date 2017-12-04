@@ -47,6 +47,7 @@ public interface BaseApiService {
      * @return
      */
     @POST()
+    @Multipart
    Observable<ResponseBody> jsonData(
             @Url String url,
             @Body RequestBody json);
@@ -58,9 +59,6 @@ public interface BaseApiService {
      */
     @Multipart
     @POST()
-    Observable<ResponseBody> moreFileUpload(@Url String url,
-                                            @Part("description") RequestBody description,
-                                            @Part() List<MultipartBody.Part> parts,
-                                            @Query("uid") String uid);
+    Observable<ResponseBody> moreFileUpload(@Url String url,@Part() List<MultipartBody.Part> parts);
 
 }

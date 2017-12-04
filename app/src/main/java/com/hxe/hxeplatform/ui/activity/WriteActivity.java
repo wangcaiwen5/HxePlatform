@@ -4,9 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.base.BaseActivity;
+import com.hxe.hxeplatform.base.BasePresenter;
 import com.hxe.hxeplatform.myview.MyToolBar;
 import com.hxe.hxeplatform.utils.ToastShow;
 
@@ -16,10 +18,15 @@ public class WriteActivity extends BaseActivity implements View.OnClickListener{
 
     @BindView(R.id.mwrite_toolbar)
     MyToolBar mToolbar;
-    @BindView(R.id.ll_video)
-    LinearLayout mVideo;
-    @BindView(R.id.ll_write)
-    LinearLayout mWrite;
+    @BindView(R.id.bt_mycreate_video)
+    RadioButton mVideo;
+    @BindView(R.id.bt_mycreate_jokes)
+    RadioButton mWrite;
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return null;
+    }
 
     @Override
     protected boolean getIsWindow() {
@@ -32,8 +39,8 @@ public class WriteActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void initView() {
-        mVideo.setOnClickListener(this);
-        mWrite.setOnClickListener(this);
+    mVideo.setOnClickListener(this);
+    mWrite.setOnClickListener(this);
     mToolbar.setLeftTitleText("取消");
     mToolbar.setMainTitle("创作");
     mToolbar.setLeftTitleClickListener(new View.OnClickListener() {
@@ -52,11 +59,11 @@ public class WriteActivity extends BaseActivity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.ll_video:
-                ToastShow.getSingleton(getApplicationContext()).showToast("暂未开通此功能");
+            case R.id.bt_mycreate_video:
+                gotoActivity(UpLoadVideosActivity.class);
                 break;
 
-            case R.id.ll_write:
+            case R.id.bt_mycreate_jokes:
                 gotoActivity(PublishActivity.class);
                 break;
         }

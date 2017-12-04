@@ -1,5 +1,6 @@
 package com.hxe.hxeplatform.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,30 +19,42 @@ import android.widget.TextView;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.bwie.uploadpicture.view.CircleImageView;
+import com.google.gson.Gson;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.MyLeftAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;
+import com.hxe.hxeplatform.base.BaseApplication;
+import com.hxe.hxeplatform.entity.UserInfoEntity;
+import com.hxe.hxeplatform.mvp.presenter.GerUserInfoPresenter;
+import com.hxe.hxeplatform.mvp.view.GetUserInfoView;
+import com.hxe.hxeplatform.myview.MyMainToolBar;
 import com.hxe.hxeplatform.myview.MyToolBar;
+import com.hxe.hxeplatform.rxretrofit.http.RetrofitManager;
 import com.hxe.hxeplatform.ui.fragment.JokesFragment;
 import com.hxe.hxeplatform.ui.fragment.RecommendFragment;
 import com.hxe.hxeplatform.ui.fragment.VideoFragment;
+import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import okhttp3.ResponseBody;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements GetUserInfoView,View.OnClickListener{
 
 
     @BindView(R.id.fl_Container)
     FrameLayout flContainer;
     @BindView(R.id.bottomBar)
     BottomNavigationBar bottomBar;
-    @BindView(R.id.m_toolbar)
-    MyToolBar mToolbar;
+    @BindView(R.id.m_maintoolbar)
+    MyMainToolBar mToolbar;
     @BindView(R.id.dl_leftRight)
     DrawerLayout drawerLayout;
     @BindView(R.id.rl_left_menu)
@@ -58,6 +71,12 @@ public class MainActivity extends BaseActivity {
     private int curFragment = -1;
     private FragmentManager manager;
 
+
+    @Override
+    protected GerUserInfoPresenter getPresenter() {
+        return new GerUserInfoPresenter(this);
+    }
+
     @Override
     protected boolean getIsWindow() {
         return false;
@@ -71,6 +90,7 @@ public class MainActivity extends BaseActivity {
         initView();
         initData();
         initBottom();
+
         /*SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration.Builder().setTopEdge(50).build();
         rvList.addItemDecoration(spaceItemDecoration);*/
         rvList.setLayoutManager(new LinearLayoutManager(this));
@@ -86,17 +106,34 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("加载头像");
+        initHeadImg();
+    }
+
+
+
+    private void initHeadImg() {
+
+        mPresenter.getUserInfo(SharedPreferencesUtils.getInstance(getApplicationContext()).getString("uid"));
+
+    }
+
+
+    @SuppressLint("ResourceType")
     private void initView() {
-       // final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mToolbar.setLeftTitleDrawable(R.mipmap.ic_launcher_round);
+        ivHead.setOnClickListener(this);
+
+        // final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         mToolbar.setMainTitle("推荐");
         mToolbar.setRightTitleDrawable(R.mipmap.write);
-        mToolbar.setLeftTitleClickListener(new View.OnClickListener() {
+
+        mToolbar.setLeftHeadImgListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawerLayout.openDrawer(Gravity.LEFT);
-
-
             }
         });
 
@@ -205,7 +242,7 @@ public class MainActivity extends BaseActivity {
                 mExitTime = System.currentTimeMillis();
             } else {
                 //小于2000ms则认为是用户确实希望退出程序-调用System.exit()方法进行退出
-                System.exit(0);
+               finish();
             }
             return true;
         }
@@ -213,5 +250,62 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.civ_imgView:
+                gotoActivity(UserActivity.class);
+                break;
+        }
+    }
 
+    @Override
+    public void onSuccess(ResponseBody body) {
+        Gson gson =new Gson();
+        try {
+            UserInfoEntity userInfoEntity = gson.fromJson(body.string(), UserInfoEntity.class);
+            String code = userInfoEntity.code;
+            String msg = userInfoEntity.msg;
+            UserInfoEntity.DataBean data = userInfoEntity.data;
+            String icon = data.icon;
+            if(code.equals("0")){
+                String token = SharedPreferencesUtils.getInstance(getApplicationContext()).getString("token");
+                System.out.println("token1=="+token);
+                System.out.println("token2=="+data.token);
+                if(token!=null){
+                    if(!token.equals(data.token)){
+                        ToastShow.getSingleton(getApplicationContext()).showToast("登录失效,请重新登录");
+                        gotoActivity(LoginActivity.class,true);
+                    }
+                }
+                RequestOptions option = new RequestOptions().placeholder(R.drawable.loading_02).diskCacheStrategy(DiskCacheStrategy.NONE);
+                Glide.with(BaseApplication.getContext()).load(icon).apply(option).into(ivHead);
+                mToolbar.setUrlLeftCircleImageView(icon);
+            }else{
+                ToastShow.getSingleton(getApplicationContext()).showToast(msg);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFail(String msg) {
+
+    }
+
+    @Override
+    public void ShowProgressBar() {
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+
+    }
 }

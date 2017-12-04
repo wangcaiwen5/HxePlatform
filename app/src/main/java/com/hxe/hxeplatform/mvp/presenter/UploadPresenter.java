@@ -28,15 +28,12 @@ public class UploadPresenter extends BasePresenter<UploadFileView> implements Up
         fileModel.setmUploadFile(this);
     }
 
-    public void uploadFile(String uid , List<File> files){
+    public void uploadFile(String uid ,String content, List<File> files){
         fileView.ShowProgressBar();
         if(TextUtils.isEmpty(uid)){
             throw new RuntimeException("uid不能为空!!!");
         }
-        if(files.size()==0){
-            throw new RuntimeException("files集合不能为空!!!");
-        }
-        fileModel.uploadFile(uid,files);
+        fileModel.uploadFile(uid,content,files);
     }
 
     @Override

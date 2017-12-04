@@ -1,5 +1,6 @@
 package com.hxe.hxeplatform.base;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -41,8 +42,52 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment  {
 
     }
 
-    protected abstract int getLayoutid();
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mPresenter =  getPresenter();
+        init();
+    }
 
+    protected abstract void init();
+
+    protected abstract P getPresenter();
+
+    protected abstract int getLayoutid();
+    /**
+     * 默认不关闭当前activity
+     * @param clz
+     */
+    public void gotoActivity(Class<?> clz) {
+        gotoActivity(clz, false, null);
+    }
+
+    /**
+     * 设置是否关闭当前activity
+     * @param clz
+     * @param isCloseCurrentActivity
+     */
+    public void gotoActivity(Class<?> clz, boolean isCloseCurrentActivity) {
+        gotoActivity(clz, isCloseCurrentActivity, null);
+    }
+
+    /**
+     * 设置是否关闭当前activity传值
+     * @param clz
+     * @param isCloseCurrentActivity
+     * @param bundle
+     */
+    public void gotoActivity(Class<?> clz, boolean isCloseCurrentActivity, Bundle bundle) {
+        Intent intent = new Intent(getActivity(), clz);
+        if (bundle != null)
+            intent.putExtras(bundle);
+        startActivity(intent);
+        if (isCloseCurrentActivity) {
+            getActivity().finish();
+        }
+
+
+    }
 
 
     @Override

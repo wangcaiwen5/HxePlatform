@@ -68,8 +68,8 @@ public class RetrofitManager {
 
 
          okHttpClient = new OkHttpClient.Builder()
-               .addInterceptor(new HttpInterceptor())
-                //.addNetworkInterceptor(new HttpInterceptor())
+             .addInterceptor(new HttpInterceptor())
+               //  .addNetworkInterceptor(new HttpInterceptor())
                 .connectTimeout(30, TimeUnit.SECONDS)//链接超时
                 .build();
 
@@ -94,9 +94,9 @@ public class RetrofitManager {
 
     }
 
-    public void moreUploadFile(String url, List<MultipartBody.Part> parts, String uid, RequestBody description, final MyShowCallBack myShowCallBack){
+    public void moreUploadFile(String url, List<MultipartBody.Part> parts,final MyShowCallBack myShowCallBack){
 
-        Observable<ResponseBody> responseBodyObservable = baseApiService.moreFileUpload(url,description,parts,uid);
+        Observable<ResponseBody> responseBodyObservable = baseApiService.moreFileUpload(url,parts);
 
         responseBodyObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
             @Override

@@ -50,14 +50,19 @@
         <service android:name=".service.IntentService" />
 
         <activity android:name=".ui.activity.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+        </activity>
+
+        <activity
+            android:name=".ui.activity.StartActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.zzti.fengyongge.imagepicker.PhotoSelectorActivity"></activity><!--//选择图片-->
-        <activity android:name="com.zzti.fengyongge.imagepicker.PhotoPreviewActivity"></activity><!--//预览图片-->
+
         <!-- 短信验证 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -75,7 +80,9 @@
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.OtherLoginActivity" />
         <activity android:name=".ui.activity.WriteActivity" />
-        <activity android:name=".ui.activity.PublishActivity"></activity>
+        <activity android:name=".ui.activity.PublishActivity" />
+        <activity android:name=".ui.activity.UserActivity" />
+        <activity android:name=".ui.activity.UpLoadVideosActivity" />
     </application>
 
 </manifest>

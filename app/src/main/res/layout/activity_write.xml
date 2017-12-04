@@ -14,59 +14,32 @@
         android:layout_height="wrap_content"></com.hxe.hxeplatform.myview.MyToolBar>
 
 
-    <LinearLayout
-        android:layout_below="@+id/mwrite_toolbar"
-        android:id="@+id/ll_video"
-        android:background="@drawable/shape_create_bg"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/x130"
-        android:gravity="center"
+    <RadioButton
+        android:id="@+id/bt_mycreate_video"
+        android:background="@drawable/write_item"
+        android:clickable="true"
+        android:button="@null"
+        android:drawableTop="@mipmap/video_img"
+        android:text="视频"
+        android:layout_marginTop="@dimen/y250"
         android:layout_centerHorizontal="true"
-        android:layout_width="@dimen/x250"
-        android:layout_height="@dimen/x250"
-        >
-        <ImageView
-            android:tint="@color/textColor_333"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/video_img"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="视频"
-            android:textColor="@color/textColor_333"
-            android:textSize="@dimen/x50"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_write"
-        android:background="@drawable/shape_create_bg"
-        android:layout_below="@+id/ll_video"
-        android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="@dimen/x150"
-        android:layout_centerHorizontal="true"
+        android:padding="@dimen/y30"
         android:layout_width="@dimen/x250"
-        android:layout_height="@dimen/x250"
-        >
-        <ImageView
-            android:tint="@color/textColor_333"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/writer_img"
-            />
+        android:layout_height="@dimen/x250" />
+    <RadioButton
+        android:id="@+id/bt_mycreate_jokes"
+        android:background="@drawable/write_item"
+        android:clickable="true"
+        android:button="@null"
+        android:drawableTop="@mipmap/writer_img"
+        android:text="段子"
+        android:layout_marginTop="@dimen/y150"
+        android:layout_below="@+id/bt_mycreate_video"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="@dimen/y30"
+        android:layout_width="@dimen/x250"
+        android:layout_height="@dimen/x250" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textColor_333"
-            android:textSize="@dimen/x50"
-            android:text="段子"
-            />
-
-    </LinearLayout>
 </RelativeLayout>

@@ -102,11 +102,6 @@ public class MyAttentionAdapter extends RecyclerView.Adapter<MyAttentionAdapter.
             ivHeadImg = itemView.findViewById(R.id.iv_head_img);
             tvDate = itemView.findViewById(R.id.tv_date);
             tvMessage  = itemView.findViewById(R.id.tv_message);
-            ivFengmian = itemView.findViewById(R.id.iv_fengmian);
-            ivGz = itemView.findViewById(R.id.iv_gz);
-            ivSc = itemView.findViewById(R.id.iv_sc);
-            ivPl = itemView.findViewById(R.id.iv_pl);
-            ivFx = itemView.findViewById(R.id.iv_fx);
         }
     }
 

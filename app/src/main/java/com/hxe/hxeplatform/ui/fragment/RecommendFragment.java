@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.TopLineFragmentPageAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;
+import com.hxe.hxeplatform.base.BasePresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,11 +35,21 @@ public class RecommendFragment extends BaseFragment {
         return R.layout.fragment_recommend_layout;
     }
 
+
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void init() {
+        initView();
+    }
+
+    private void initView() {
         timelineViewpager.setAdapter(new TopLineFragmentPageAdapter(getChildFragmentManager(),getActivity()));
         timelineTablayout.setupWithViewPager(timelineViewpager);
+    }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return null;
     }
 
 

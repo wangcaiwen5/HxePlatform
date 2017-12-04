@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.base.BaseActivity;
+import com.hxe.hxeplatform.base.BasePresenter;
+import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 
 import butterknife.BindView;
@@ -34,6 +36,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             case R.id.bt_qq_login:
                 ToastShow.getSingleton(this).showToast("QQ登录");
+                SharedPreferencesUtils.getInstance(getApplicationContext()).putBoolean("isLogin",true);
                 gotoActivity(MainActivity.class,true);
                 break;
 
@@ -45,6 +48,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
 
     @Override
+    protected BasePresenter getPresenter() {
+        return null;
+    }
+
+    @Override
     protected boolean getIsWindow() {
         return true;
     }
@@ -52,7 +60,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void init() {
 
+        initLogin();
         initView();
+    }
+
+    private void initLogin() {
+        /*boolean isLogin = SharedPreferencesUtils.getInstance(getApplicationContext()).getBoolean("isLogin");
+        if(isLogin){
+            gotoActivity(MainActivity.class,true);
+        }*/
     }
 
     private void initView() {

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bwie.uploadpicture.view.CircleImageView;
 import com.hxe.hxeplatform.R;
 
 /**
@@ -31,6 +32,7 @@ public class MyToolBar extends Toolbar {
      * 右侧Title
      */
     private TextView mTxtRightTitle;
+    private CircleImageView mCircleImageView;
 
     public MyToolBar(Context context)
     {
@@ -49,6 +51,7 @@ public class MyToolBar extends Toolbar {
         LayoutInflater.from(context).inflate(R.layout.toolbar_layout, this);
         mTxtLeftTitle = (TextView) findViewById(R.id.txt_left_title);
         mTxtMiddleTitle = (TextView) findViewById(R.id.txt_main_title);
+
         mTxtRightTitle = (TextView) findViewById(R.id.txt_right_title);
     }
 
@@ -62,6 +65,8 @@ public class MyToolBar extends Toolbar {
         mTxtMiddleTitle.setVisibility(View.VISIBLE);
         mTxtMiddleTitle.setText(text);
     }
+
+
 
     //设置中间title的内容文字的颜色
     public void setMainTitleColor(int color)
@@ -88,6 +93,33 @@ public class MyToolBar extends Toolbar {
         Drawable dwLeft = ContextCompat.getDrawable(getContext(), res);
         dwLeft.setBounds(0, 0, dwLeft.getMinimumWidth(), dwLeft.getMinimumHeight());
         mTxtLeftTitle.setCompoundDrawables(dwLeft, null, null, null);
+    }
+
+    //设置leftTextView是否显示
+    public void setLeftTitleIsShow(boolean b){
+        if(b==true){
+            mTxtLeftTitle.setVisibility(VISIBLE);
+        }else{
+            mTxtLeftTitle.setVisibility(GONE);
+        }
+
+    }
+
+    public void setHeadImgIsShow(boolean b){
+        if(b==true){
+            mCircleImageView.setVisibility(VISIBLE);
+        }else{
+            mCircleImageView.setVisibility(GONE);
+        }
+    }
+
+    public CircleImageView getHeadImgView(){
+        return  mCircleImageView;
+    }
+
+    //设置头像的点击事件
+    public void setLeftHeadImgListener(OnClickListener onClickListener){
+        mCircleImageView.setOnClickListener(onClickListener);
     }
 
     //设置title左边点击事件

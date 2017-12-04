@@ -8,21 +8,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.MyHotAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;
+import com.hxe.hxeplatform.base.BasePresenter;
+import com.hxe.hxeplatform.entity.GetVediosListEntity;
+import com.hxe.hxeplatform.mvp.presenter.GetVideosListPresenter;
+import com.hxe.hxeplatform.mvp.view.GetVideosListView;
+import com.hxe.hxeplatform.ui.activity.LoginActivity;
+import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.stx.xhb.xbanner.XBanner;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.ResponseBody;
 
 /**
  * Author:wangcaiwen
@@ -30,11 +40,16 @@ import butterknife.Unbinder;
  * Description:
  */
 
-public class HotFragment extends BaseFragment {
+public class HotFragment extends BaseFragment<GetVideosListPresenter> implements GetVideosListView,XRecyclerView.LoadingListener{
     @BindView(R.id.rv_list)
     XRecyclerView recyclerView;
+    @BindView(R.id.pb_hotProgress)
+    ProgressBar hotProgress;
     private XBanner xbanner;
-
+    private  int page=1;
+    private MyHotAdapter adapter;
+    private List<GetVediosListEntity.DataBean> data;
+    private List<GetVediosListEntity.DataBean> newdata = new ArrayList<>();
 
     @Override
     protected int getLayoutid() {
@@ -42,11 +57,31 @@ public class HotFragment extends BaseFragment {
     }
 
 
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void init() {
+        initView();
         initList();
+        initData();
     }
+
+    private void initData() {
+        String uid = SharedPreferencesUtils.getInstance(getActivity()).getString("uid");
+        mPresenter.getVideosList("0",uid,page+"");
+    }
+
+    private void initView() {
+    recyclerView.setPullRefreshEnabled(true);
+    recyclerView.setLoadingMoreEnabled(true);
+    recyclerView.setLoadingListener(this);
+    }
+
+    @Override
+    protected GetVideosListPresenter getPresenter() {
+        return new GetVideosListPresenter(this);
+    }
+
+
 
     private void initList() {
         View view = View.inflate(getActivity(), R.layout.xbanner_layout, null);
@@ -54,8 +89,6 @@ public class HotFragment extends BaseFragment {
         initBannerData();
         recyclerView.addHeaderView(view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    recyclerView.setAdapter(new MyHotAdapter(getActivity()));
-
     }
 
     private void initBannerData() {
@@ -85,4 +118,75 @@ public class HotFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onFail(String msg) {
+
+    }
+
+    @Override
+    public void onSuccess(ResponseBody json) {
+        Gson gson = new Gson();
+        try {
+            String string = json.string();
+            System.out.println("获取视频list==="+string);
+            GetVediosListEntity getVediosListEntity = gson.fromJson(string, GetVediosListEntity.class);
+            String code = getVediosListEntity.code;
+            String msg = getVediosListEntity.msg;
+            if(code.equals("0")){
+                ToastShow.getSingleton(getActivity()).showToast(msg);
+                data = getVediosListEntity.data;
+                newdata.addAll(data);
+                if(data.size()>0)
+                    if(adapter==null){
+                        adapter = new MyHotAdapter(getActivity(), newdata);
+                        recyclerView.setAdapter(adapter);
+                    }else{
+                        adapter.notifyDataSetChanged();
+                    }
+
+
+            }else if(code.equals("2")){
+                ToastShow.getSingleton(getActivity()).showToast(msg+",请重新登录");
+                gotoActivity(LoginActivity.class,true);
+            }else{
+                ToastShow.getSingleton(getActivity()).showToast(msg);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+        hotProgress.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void ShowProgressBar() {
+        hotProgress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        System.out.println("获取热门异常=="+throwable);
+    }
+
+
+    //刷新
+    @Override
+    public void onRefresh() {
+        newdata.clear();
+        data.clear();
+        page=1;
+        initData();
+        recyclerView.refreshComplete();
+    }
+    //加载更多
+    @Override
+    public void onLoadMore() {
+        page++;
+        initData();
+        recyclerView.loadMoreComplete();
+    }
 }

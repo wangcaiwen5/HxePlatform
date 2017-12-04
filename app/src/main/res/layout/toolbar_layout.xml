@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/baseColor_title"
+    android:minHeight="?attr/actionBarSize"
+    android:paddingTop="@dimen/toolbar_padding_top"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.v7.widget.Toolbar
         app:contentInsetStart="0dp"
+        android:paddingLeft="@dimen/x23"
+        android:paddingRight="@dimen/x23"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
         <TextView
             android:id="@+id/txt_left_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_width="@dimen/x100"
+            android:layout_height="@dimen/x100"
             android:gravity="center"
             android:maxLines="1"
+            android:background="@drawable/toolbar_item"
+            android:clickable="true"
             android:textColor="#ffffff"
             android:textSize="@dimen/x35"
-            android:visibility="visible"/>
+            android:text="22222"
+            />
 
         <TextView
             android:id="@+id/txt_main_title"
@@ -31,12 +40,13 @@
 
         <TextView
             android:id="@+id/txt_right_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/x100"
+            android:layout_height="@dimen/x100"
             android:layout_gravity="right"
             android:gravity="center"
-            android:layout_marginRight="@dimen/x30"
             android:textColor="#ffffff"
+            android:background="@drawable/toolbar_item"
+            android:clickable="true"
             android:textSize="@dimen/x35"
             android:visibility="visible"/>
 

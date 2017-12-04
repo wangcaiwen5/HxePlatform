@@ -37,7 +37,7 @@ public class JokesEntity {
         public Object commentNum;
         public String content;
         public String createTime;
-        public Object imgUrls;
+        public String imgUrls;
         public int jid;
         public Object praiseNum;
         public Object shareNum;

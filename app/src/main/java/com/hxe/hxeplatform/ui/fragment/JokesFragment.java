@@ -11,6 +11,7 @@ import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.MyHotAdapter;
 import com.hxe.hxeplatform.adapter.MyJokesAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;
+import com.hxe.hxeplatform.base.BasePresenter;
 import com.hxe.hxeplatform.entity.JokesEntity;
 import com.hxe.hxeplatform.mvp.presenter.JokesListPresenter;
 import com.hxe.hxeplatform.mvp.view.JokesListView;
@@ -30,112 +31,108 @@ import okhttp3.ResponseBody;
  * Description:
  */
 
-public class JokesFragment extends BaseFragment implements XRecyclerView.LoadingListener{
+public class JokesFragment extends BaseFragment<JokesListPresenter> implements XRecyclerView.LoadingListener,JokesListView{
     @BindView(R.id.rv_jokesList)
     XRecyclerView recyclerView;
     @BindView(R.id.pb_loading)
     ProgressBar progressBar;
-    List<JokesEntity.DataBean> list = new ArrayList<>();
     private MyJokesAdapter adapter;
     private int page=1;
+    private List<JokesEntity.DataBean> data;
+    private List<JokesEntity.DataBean> moreList= new ArrayList<>();
 
     @Override
     protected int getLayoutid() {
         return R.layout.fragment_jokes_layout;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initView();
-       initData();
 
+
+    @Override
+    protected void init() {
+        initView();
+        initData();
+    }
+
+    @Override
+    protected JokesListPresenter getPresenter() {
+        return new JokesListPresenter(this);
     }
 
     private void initView() {
-        recyclerView.setLoadingListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setPullRefreshEnabled(true);
-    recyclerView.setLoadingMoreEnabled(true);
-
-
+        recyclerView.setLoadingMoreEnabled(true);
+        recyclerView.setLoadingListener(this);
     }
 
     private void initData() {
-        JokesListPresenter presenter = new JokesListPresenter(new JokesListView() {
-            @Override
-            public void onSuccess(ResponseBody msg) {
-                try {
-                    String string = msg.string();
-
-                    System.out.println("段子列表==="+string);
-                    Gson gson = new Gson();
-                    //解析
-                    JokesEntity jokesEntity = gson.fromJson(string, JokesEntity.class);
-                    String code = jokesEntity.code;
-                    String msg1 = jokesEntity.msg;
-                    if(code.equals("0")){
-                        List<JokesEntity.DataBean> data = jokesEntity.data;
-                        if(data == null && data.size()<=0){
-                            System.out.println("刷新===");
-                            return;
-                        }
-                        list.addAll(data);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        if(adapter==null){
-                            adapter = new MyJokesAdapter(getActivity(),list);
-                            recyclerView.setAdapter(adapter);
-                        }else{
-                            System.out.println("刷新更多===");
-                            adapter.notifyDataSetChanged();
-                        }
-
-                    }else{
-                        ToastShow.getSingleton(getActivity()).showToast(msg1);
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFail(String msg) {
-            }
-            @Override
-            public void hideProgressBar() {
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void ShowProgressBar() {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                System.out.println("=======段子"+throwable);
-            }
-
-
-        });
-        presenter.getJokesList(page+"");
+        mPresenter.getJokesList(page+"");
     }
 
     @Override
     public void onRefresh() {
-        list.clear();
-        if(adapter!=null){
-            adapter=null;
-        }
-        page++;
+        moreList.clear();
+        data.clear();
+        page=1;
         initData();
        recyclerView.refreshComplete();
     }
 
     @Override
     public void onLoadMore() {
+        // TODO: 2017/12/3 加载更多有bug
             page++;
             initData();
             recyclerView.loadMoreComplete();
+    }
+
+    @Override
+    public void onSuccess(ResponseBody msg) {
+        try {
+            String string = msg.string();
+
+            System.out.println("段子列表==="+string);
+            Gson gson = new Gson();
+            //解析
+            JokesEntity jokesEntity = gson.fromJson(string, JokesEntity.class);
+            String code = jokesEntity.code;
+            String msg1 = jokesEntity.msg;
+            data = jokesEntity.data;
+                /*if(data == null && data.size()<=0){
+                    return;
+                }*/
+
+                moreList.addAll(data);
+                if(adapter==null){
+                    adapter = new MyJokesAdapter(getActivity(), moreList);
+                    recyclerView.setAdapter(adapter);
+                }else{
+                   adapter.notifyDataSetChanged();
+                }
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFail(String msg) {
+    }
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void ShowProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        System.out.println("=======段子"+throwable);
     }
 }

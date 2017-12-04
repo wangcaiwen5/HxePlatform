@@ -55,7 +55,7 @@ public class AppUtils {
     /**
      * 返回当前程序版本名
      */
-    public static String getAppVersionName(Context context) {
+    public static String getAppVersionCode(Context context) {
         String versionName = "";
         int versioncode = 1;
         try {
@@ -69,7 +69,7 @@ public class AppUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return versionName;
+        return versioncode+"";
     }
 
 

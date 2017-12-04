@@ -141,17 +141,15 @@
         android:layout_height="wrap_content"
         android:text="今天天气不错啊"
         />
-<ImageView
-    android:layout_marginLeft="@dimen/x30"
-    android:layout_marginRight="@dimen/x30"
-    android:layout_below="@+id/tv_message"
-    android:scaleType="fitXY"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/x500"
-    android:src="@mipmap/login_bg"
-    android:id="@+id/iv_fengmian" />
 
-
+    <cn.jzvd.JZVideoPlayerStandard
+        android:id="@+id/app_video_box"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_below="@+id/tv_message"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x500"></cn.jzvd.JZVideoPlayerStandard>
 
     <LinearLayout
         android:orientation="vertical"
@@ -160,18 +158,19 @@
         android:layout_marginRight="@dimen/x50"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/iv_fengmian"
+        android:layout_alignTop="@+id/app_video_box"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/x500"
-        android:id="@+id/linearLayout">
+        android:id="@+id/ll_item_sum">
         <ImageView
-            android:id="@+id/iv_gz"
+            android:id="@+id/iv_attention"
             android:layout_weight="1"
-            android:layout_width="@dimen/x70"
-            android:layout_height="@dimen/x70"
-            android:src="@mipmap/ic_launcher_round"
+            android:layout_width="@dimen/x50"
+            android:layout_height="@dimen/x50"
+            android:src="@mipmap/sc"
             />
         <TextView
+            android:id="@+id/tv_attention"
             android:layout_weight="1"
             android:textColor="@color/textColor_white"
             android:layout_width="wrap_content"
@@ -179,13 +178,14 @@
             android:text="1232"
             />
         <ImageView
-            android:id="@+id/iv_sc"
+            android:id="@+id/iv_collect"
             android:layout_weight="1"
-            android:layout_width="@dimen/x70"
-            android:layout_height="@dimen/x70"
-            android:src="@mipmap/ic_launcher_round"
+            android:layout_width="@dimen/x50"
+            android:layout_height="@dimen/x50"
+            android:src="@mipmap/sfsf"
             />
         <TextView
+            android:id="@+id/tv_collect"
             android:layout_weight="1"
             android:textColor="@color/textColor_white"
             android:layout_width="wrap_content"
@@ -193,13 +193,14 @@
             android:text="666"
             />
         <ImageView
-            android:id="@+id/iv_fx"
+            android:id="@+id/iv_share"
             android:layout_weight="1"
-            android:layout_width="@dimen/x70"
-            android:layout_height="@dimen/x70"
-            android:src="@mipmap/ic_launcher_round"
+            android:layout_width="@dimen/x50"
+            android:layout_height="@dimen/x50"
+            android:src="@mipmap/fx2"
             />
         <TextView
+            android:id="@+id/tv_share"
             android:layout_weight="1"
             android:textColor="@color/textColor_white"
             android:layout_width="wrap_content"
@@ -207,13 +208,13 @@
             android:text="509"
             />
         <ImageView
-            android:id="@+id/iv_pl"
-            android:layout_width="@dimen/x70"
-            android:layout_height="@dimen/x70"
-
+            android:id="@+id/iv_comment"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x60"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher_round" />
+            android:src="@mipmap/pinglun2" />
         <TextView
+            android:id="@+id/tv_comment"
             android:layout_weight="1"
             android:textColor="@color/textColor_white"
             android:layout_width="wrap_content"
@@ -222,8 +223,14 @@
             />
     </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_comments"
+        android:layout_below="@+id/app_video_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
     <View
-        android:layout_below="@+id/linearLayout"
+        android:layout_below="@+id/rv_comments"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x5"
         android:layout_marginTop="@dimen/x10"

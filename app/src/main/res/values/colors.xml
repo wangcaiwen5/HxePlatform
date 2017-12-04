@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#19A0EF</color>
-    <color name="colorYellow">#19A0EF</color>
+    <color name="colorYellow">#8DD0F7</color>
     <color name="colorPrimaryDark">#19A0EF</color>
     <color name="colorAccent">#FF4081</color>
     <color name="windowback_color">#ffffff</color>
@@ -16,6 +16,8 @@
     <color name="colorGreen">#5DB254</color>
     <color name="colorLineNarrow">#cfcfcf</color>
     <color name="colorLineWide">#999999</color>
+
+
 
     <color name="bar_grey">#393a3e</color>
     <color name="color_f6">#f6f6f6</color>

@@ -16,19 +16,22 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bwie.uploadpicture.gridimageview.GridImageView;
-import com.bwie.uploadpicture.gridimageview.GridImageViewAdapter;
+
+import com.google.gson.Gson;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.FullyGridLayoutManager;
 import com.hxe.hxeplatform.adapter.GridImageAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;
+import com.hxe.hxeplatform.base.BasePresenter;
 import com.hxe.hxeplatform.mvp.presenter.UploadPresenter;
 import com.hxe.hxeplatform.mvp.view.UploadFileView;
 import com.hxe.hxeplatform.myview.MyToolBar;
+import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -36,6 +39,8 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.permissions.RxPermissions;
 import com.luck.picture.lib.tools.PictureFileUtils;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +54,7 @@ import okhttp3.ResponseBody;
 
 import static com.igexin.sdk.GTServiceManager.context;
 
-public class PublishActivity extends BaseActivity implements View.OnClickListener{
+public class PublishActivity extends BaseActivity<UploadPresenter> implements View.OnClickListener,UploadFileView{
 
     @BindView(R.id.m_publishToolbar)
     MyToolBar mToolBar;
@@ -57,11 +62,19 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
     EditText mText;
     @BindView(R.id.img_recyclerView)
     RecyclerView mRecyclerView;
+    @BindView(R.id.pb_uploadProgressBar)
+    ProgressBar mProgressBar;
 
     private GridImageAdapter adapter;
     private List<LocalMedia> selectList = new ArrayList<>();
     private int maxSelectNum = 9;
     private List<File> files= new ArrayList<>();
+
+
+    @Override
+    protected UploadPresenter getPresenter() {
+        return new UploadPresenter(this);
+    }
 
     @Override
     protected boolean getIsWindow() {
@@ -75,7 +88,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initData() {
-        FullyGridLayoutManager manager = new FullyGridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false);
+        FullyGridLayoutManager manager = new FullyGridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
 
         adapter = new GridImageAdapter(this, onAddPicClickListener);
@@ -114,12 +127,14 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
         adapter.setOnItemClickListener(new GridImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
+                ToastShow.getSingleton(getApplicationContext()).showToast("图片查看");
                 if (selectList.size() > 0) {
                     LocalMedia media = selectList.get(position);
                     String pictureType = media.getPictureType();
                     int mediaType = PictureMimeType.pictureToVideo(pictureType);
                     switch (mediaType) {
                         case 1:
+
                             // 预览图片 可自定长按保存路径
                             //PictureSelector.create(MainActivity.this).externalPicturePreview(position, "/custom_file", selectList);
                             PictureSelector.create(PublishActivity.this).externalPicturePreview(position, selectList);
@@ -143,24 +158,24 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
         public void onAddPicClick() {
 
             // 进入相册 以下是例子：用不到的api可以不写
-            PictureSelector.create(PublishActivity.this)
-                    .openGallery(1)//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+           PictureSelector.create(PublishActivity.this)
+                    .openGallery(PictureMimeType.ofAll())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                     // .theme(R.style.picture_default_style)//主题样式(不设置为默认样式) 也可参考demo values/styles下 例如：R.style.picture.white.style
                     .maxSelectNum(9)// 最大图片选择数量 int
                     .minSelectNum(1)// 最小选择数量 int
-                    .imageSpanCount(4)// 每行显示个数 int
+                    .imageSpanCount(3)// 每行显示个数 int
                     .selectionMode(PictureConfig.MULTIPLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
                     .previewImage(true)// 是否可预览图片 true or false
                     .previewVideo(true)// 是否可预览视频 true or false
                     .enablePreviewAudio(true) // 是否可播放音频 true or false
                     .isCamera(true)// 是否显示拍照按钮 true or false
                     .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
-                    .isZoomAnim(false)// 图片列表点击 缩放效果 默认true
+                    .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
                     .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                     // .setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
                     .enableCrop(false)// 是否裁剪 true or false
                     .compress(false)// 是否压缩 true or false
-                    .glideOverride(300,300)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+                    .glideOverride(400,400)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
                     .withAspectRatio(3,2)// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                     .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示 true or false
                     .isGif(true)// 是否显示gif图片 true or false
@@ -170,7 +185,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                     .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
                     .showCropGrid(false)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false    true or false
                     .openClickSound(false)// 是否开启点击声音 true or false
-                    // .selectionMedia()// 是否传入已选图片 List<LocalMedia> list
+                     .selectionMedia(selectList)// 是否传入已选图片 List<LocalMedia> list
                     .previewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中) true or false
                     // .cropCompressQuality()// 裁剪压缩质量 默认90 int
                     .minimumCompressSize(100)// 小于100kb的图片不压缩
@@ -204,42 +219,12 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
         public void onClick(View v) {
             for (LocalMedia localMedia : selectList) {
                 String path = localMedia.getPath();
-
+                File file = new File(path);
+                files.add(file);
             }
-            File file = new File("/sdcard/1511930892164.jpg");
-            files.add(file);
-            UploadPresenter presenter = new UploadPresenter(new UploadFileView() {
-                @Override
-                public void onFail(String msg) {
-                    System.out.println("");
-                }
 
-                @Override
-                public void onSuccess(ResponseBody body) {
-                    try {
-                        System.out.println("上传图片"+body.string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
 
-                @Override
-                public void hideProgressBar() {
-
-                }
-
-                @Override
-                public void ShowProgressBar() {
-
-                }
-
-                @Override
-                public void onError(Throwable throwable) {
-                    System.out.println("上传异常"+throwable);
-                }
-            });
-
-            presenter.uploadFile("169",files);
+            mPresenter.uploadFile(SharedPreferencesUtils.getInstance(PublishActivity.this).getString("uid"),mText.getText().toString(),files);
         }
     });
 
@@ -327,4 +312,41 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    @Override
+    public void onFail(String msg) {
+        System.out.println("");
+    }
+
+    @Override
+    public void onSuccess(ResponseBody body) {
+        try {
+            String string = body.string();
+            JSONObject jsonObject = new JSONObject(string);
+            String code = jsonObject.getString("code");
+            String msg = jsonObject.getString("msg");
+            if(code.equals("0")){
+                ToastShow.getSingleton(PublishActivity.this).showToast(msg);
+                finish();
+            }else{
+                ToastShow.getSingleton(PublishActivity.this).showToast(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void ShowProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        System.out.println("上传异常"+throwable);
+    }
 }

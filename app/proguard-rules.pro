@@ -12,6 +12,14 @@ public static final int *;
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+#=============================glide========================#
+ -keep public class * implements com.bumptech.glide.module.GlideModule
+    -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+      **[] $VALUES;
+      public *;
+    }
+
 #=============================短信验证登录========================#
 -dontwarn com.mob.**
 -keep class com.mob.**{*;}

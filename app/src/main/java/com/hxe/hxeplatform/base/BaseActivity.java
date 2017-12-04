@@ -9,7 +9,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
+import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.service.IntentService;
 import com.hxe.hxeplatform.service.PushService;
 import com.hxe.hxeplatform.utils.ToastShow;
@@ -27,7 +30,7 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity {
 
-    protected P mPresenter;
+    protected P mPresenter  ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         setIsWindow(getIsWindow());
-
+      mPresenter =  getPresenter();
 
 
 
@@ -49,6 +52,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     }
 
+    protected abstract P getPresenter();
+
     private void setIsWindow(boolean isWindow) {
         System.out.println("isWindow====="+isWindow);
         if(isWindow){
@@ -61,6 +66,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
         }
     }

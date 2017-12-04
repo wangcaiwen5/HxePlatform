@@ -1,15 +1,10 @@
 <resources>
 
-   <!--  Base application theme.
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        &lt;!&ndash; Customize your theme here. &ndash;&gt;tabTextColor
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorLineNarrow</item>
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/start_bg</item>
+    </style>
 
-        &lt;!&ndash;<item name="android:windowIsTranslucent">true</item>
-        <item name="windowNoTitle">true</item>&ndash;&gt;
-    </style>-->
+
 
     <style name="AppTheme" parent="@style/AppBaseTheme"></style>
 
@@ -28,6 +23,10 @@
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
     </style>
+
+
+
+
 
     <!--默认样式 注意* 样式只可修改，不能删除任何一项 否则报错-->
     <style name="picture.default.style" parent="Theme.AppCompat.Light.DarkActionBar">

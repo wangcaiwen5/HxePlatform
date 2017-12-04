@@ -5,7 +5,7 @@
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/rv_jokesList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.jcodecraeer.xrecyclerview.XRecyclerView>
+        android:layout_height="match_parent"></com.jcodecraeer.xrecyclerview.XRecyclerView>
 
     <ProgressBar
         android:id="@+id/pb_loading"

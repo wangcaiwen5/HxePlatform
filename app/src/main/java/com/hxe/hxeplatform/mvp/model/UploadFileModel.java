@@ -24,25 +24,22 @@ import okhttp3.ResponseBody;
 
 public class UploadFileModel {
 
-    public void uploadFile(String uid , List<File> files){
-
-
-        List<MultipartBody.Part> parts = new ArrayList<>();
-
-        for (int i = 0; i < files.size(); i++) {
-            System.out.println("========上传"+files.size());
-            File singleFile = files.get(i);
-            // 创建 RequestBody，用于封装 请求RequestBody
-            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), files.get(i));
-            //File字段
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file",singleFile.getName(),requestFile);
-            parts.add(body);
+    public void uploadFile(String uid ,String content, List<File> files ){
+        System.out.println("添加文件流");
+        MultipartBody.Builder builder=new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("uid",uid)
+                .addFormDataPart("content",content);
+        System.out.println("uid==="+uid);
+        if(files !=null && files.size()>0){
+            for (File file : files) {
+                System.out.println("文件=="+file.getPath());
+                RequestBody requestBody=RequestBody.create(MediaType.parse("multipart/form-data"),file);
+                builder.addFormDataPart("jokeFiles",file.getName(),requestBody);
+            }
         }
-        RequestBody description = RequestBody.create(MediaType.parse("multipart/form-data"), "我的头像");
-        RetrofitManager.getInstance(BaseApplication.getContext()).createBaseApi().moreUploadFile(Api.UPLOAD_FILE,
+        List<MultipartBody.Part> parts = builder.build().parts();
+        RetrofitManager.getInstance(BaseApplication.getContext()).createBaseApi().moreUploadFile(Api.MORE_UPLOAD_File,
                 parts,
-                uid,
-                description,
                 new RetrofitManager.MyShowCallBack() {
             @Override
             public void onError(Throwable e) {

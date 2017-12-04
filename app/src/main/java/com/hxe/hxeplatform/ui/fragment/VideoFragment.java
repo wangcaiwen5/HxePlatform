@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.base.BaseFragment;
+import com.hxe.hxeplatform.base.BasePresenter;
 
 /**
  * Author:wangcaiwen
@@ -18,8 +19,15 @@ public class VideoFragment extends BaseFragment {
         return R.layout.fragment_video_layout;
     }
 
+
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void init() {
+
+    }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return null;
     }
 }

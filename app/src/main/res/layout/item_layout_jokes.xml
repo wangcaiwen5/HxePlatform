@@ -62,16 +62,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:tint="@color/colorPrimary"
                         android:layout_width="@dimen/x70"
                         android:layout_height="@dimen/x70"
                         android:src="@mipmap/ly"
                         />
                     <TextView
+                        android:id="@+id/tv_pl"
                         android:layout_width="wrap_content"
                         android:textSize="@dimen/x25"
                         android:layout_height="wrap_content"
-                        android:text="屏蔽"
+                        android:text="1212"
                         />
                 </LinearLayout>
 
@@ -85,16 +85,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:tint="@color/colorPrimary"
                         android:layout_width="@dimen/x70"
                         android:layout_height="@dimen/x70"
                         android:src="@mipmap/fx"
                         />
                     <TextView
+                        android:id="@+id/tv_fx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/x25"
-                        android:text="复制链接"
+                        android:text="1234"
                         />
                 </LinearLayout>
                 <LinearLayout
@@ -107,16 +107,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:tint="@color/colorPrimary"
                         android:layout_width="@dimen/x70"
                         android:layout_height="@dimen/x70"
-                        android:src="@mipmap/sc"
+                        android:src="@mipmap/gz"
                         />
                     <TextView
+                        android:id="@+id/tv_gz"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/x25"
-                        android:text="举报"
+                        android:text="323"
                         />
                 </LinearLayout>
 
@@ -136,26 +136,40 @@
 
         <TextView
             android:id="@+id/tv_message"
+            android:clickable="true"
+            android:background="@drawable/recyclerview_item"
             android:layout_marginLeft="@dimen/x30"
             android:layout_below="@+id/rl"
             android:textSize="@dimen/x40"
+            android:ellipsize="end"
+            android:lines="5"
             android:textColor="@color/textColor_333"
             android:layout_marginTop="@dimen/x20"
-            android:layout_marginBottom="@dimen/x20"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/jokes"
             />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mGridview"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:gravity="center"
+        android:overScrollMode="never"
+        android:layout_marginBottom="@dimen/x20"
+        android:layout_below="@id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
 
 
 
 
         <View
-            android:layout_below="@+id/tv_message"
+            android:layout_below="@+id/mGridview"
             android:layout_width="match_parent"
             android:layout_height="@dimen/x5"
+
             android:layout_marginTop="@dimen/x10"
             android:layout_marginBottom="@dimen/x10"
             android:background="@color/colorLineNarrow"

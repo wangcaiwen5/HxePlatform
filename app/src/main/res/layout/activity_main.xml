@@ -16,11 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.hxe.hxeplatform.myview.MyToolBar
-            android:id="@+id/m_toolbar"
+        <com.hxe.hxeplatform.myview.MyMainToolBar
+            android:id="@+id/m_maintoolbar"
+            android:layout_marginTop="0dp"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></com.hxe.hxeplatform.myview.MyToolBar>
+            android:layout_height="wrap_content"></com.hxe.hxeplatform.myview.MyMainToolBar>
 
         <FrameLayout
             android:id="@+id/fl_Container"

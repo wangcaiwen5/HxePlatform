@@ -2,14 +2,21 @@ package com.hxe.hxeplatform.rxretrofit.http;
 
 import android.provider.SyncStateContract;
 
+import com.hxe.hxeplatform.base.BaseApplication;
+import com.hxe.hxeplatform.utils.AppUtils;
+import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
+
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -24,8 +31,10 @@ public class HttpInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
 
-
-
+        String token = SharedPreferencesUtils.getInstance(BaseApplication.getContext()).getString("token");
+        String appVersionCode = AppUtils.getAppVersionCode(BaseApplication.getContext());
+        System.out.println("appVersionCode==="+appVersionCode);
+        System.out.println("Token==="+token);
 //https://www.zhaoapi.cn/quarter/getJokes?source=android&appVersion=100
         //获取到request
         Request request = chain.request();
@@ -34,8 +43,8 @@ public class HttpInterceptor implements Interceptor {
         //公共参数
         Map<String,Object> hashmap = new HashMap<>();
         hashmap.put("source","android");
-        hashmap.put("appVersion",100);
-        hashmap.put("token","F7CC2E9C31E04C2862A635FF2182D819");
+        hashmap.put("appVersion",appVersionCode);
+        hashmap.put("token",token+"" );
 
 
         //get请求的封装
@@ -55,7 +64,7 @@ public class HttpInterceptor implements Interceptor {
             request = request.newBuilder().url(newUrl).build();  //重新构建请求
 
         }else if (method.equals("POST")){
-                FormBody.Builder builder = new FormBody.Builder();
+            FormBody.Builder builder = new FormBody.Builder();
             if(request.body() instanceof FormBody){
             FormBody formBody = (FormBody) request.body();//初始body
 
@@ -63,17 +72,28 @@ public class HttpInterceptor implements Interceptor {
                     builder.add(formBody.encodedName(i),formBody.encodedValue(i));
                 }
                  builder.add("source", "android")
-                        .add("appVersion", "100")
-                        .add("token", "F7CC2E9C31E04C2862A635FF2182D819");
+                        .add("appVersion", appVersionCode+"")
+                        .add("token", token+"");
+                request = request.newBuilder().post(builder.build()).build();
+            }else if(request.body() instanceof MultipartBody){
+                    MultipartBody body = (MultipartBody) request.body();
+                    MultipartBody.Builder builder1 = new MultipartBody.Builder().setType(MultipartBody.FORM);
+                builder1.addFormDataPart("source","android")
+                        .addFormDataPart("appVersion",appVersionCode+"")
+                        .addFormDataPart("token",token+"");
 
+                List<MultipartBody.Part>  parts = body.parts();
+                for (MultipartBody.Part part : parts) {
+                    builder1.addPart(part);
+                }
+
+                request = request.newBuilder().post(builder1.build()).build();
             }
-            request = request.newBuilder().post(builder.build()).build();
+
 
 
         }
-        /*Response proceed = chain.proceed(request);
-        String string = proceed.body().string();
-        System.out.println("拦截器"+string);*/
+
         return chain.proceed(request);
     }
 }

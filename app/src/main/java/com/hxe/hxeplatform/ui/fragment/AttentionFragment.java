@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.MyHotAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;
+import com.hxe.hxeplatform.base.BasePresenter;
 import com.hxe.hxeplatform.utils.ToastShow;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.stx.xhb.xbanner.XBanner;
@@ -37,10 +38,16 @@ public class AttentionFragment extends BaseFragment {
         return R.layout.fragment_attention_layout;
     }
 
+
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void init() {
         initList();
+    }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return null;
     }
 
     private void initList() {
@@ -49,7 +56,7 @@ public class AttentionFragment extends BaseFragment {
         initBannerData();
         recyclerView.addHeaderView(view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new MyHotAdapter(getActivity()));
+        //recyclerView.setAdapter(new MyHotAdapter(getActivity()));
 
     }
 

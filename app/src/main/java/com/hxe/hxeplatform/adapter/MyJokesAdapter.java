@@ -5,23 +5,29 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.bwie.uploadpicture.view.CircleImageView;
 import com.hxe.hxeplatform.R;
-import com.hxe.hxeplatform.entity.Item;
 import com.hxe.hxeplatform.entity.JokesEntity;
+import com.hxe.hxeplatform.myview.MyGridView;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 /**
  * Author:wangcaiwen
@@ -36,16 +42,78 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
     private OnItemClickListener mOnItemClickListener;
     private OnItemlongClickListener mOnItemlongClickListener;
 
+
+
     public MyJokesAdapter(Context context,List<JokesEntity.DataBean> list) {
         this.list = list;
         this.context = context;
-
     }
+
+    public void addAll(List<JokesEntity.DataBean> lists){
+        if(list!=null && list.size()>0){
+            System.out.println("添加了一个lists集合");
+
+            list.addAll(lists);
+        }
+        notifyDataSetChanged();
+    }
+
+
+   /* @Override
+    public int getItemViewType(int position) {
+        String imgUrls = (String) list.get(position).imgUrls;
+        String[] split = imgUrls.split("\\|");
+        if(split.length==0){
+            return FlagUtils.ZERO_TYPE;
+        }else if(split.length==1){
+            return FlagUtils.ONE_TYPE;
+        }else if(split.length==2){
+            return FlagUtils.TWO_TYPE;
+        }else if(split.length==3){
+            return FlagUtils.THREE_TYPE;
+        }else if(split.length==4){
+            return FlagUtils.FOUR_TYPE;
+        }else if(split.length==5){
+            return FlagUtils.FIVE_TYPE;
+        }else if(split.length==6){
+            return FlagUtils.SIX_TYPE;
+        }else if(split.length==7){
+            return FlagUtils.SEVEN_TYPE;
+        }else if(split.length==8){
+            return FlagUtils.EIGHT_TYPE;
+        }else if(split.length==9){
+            return FlagUtils.NINE_TYPE;
+        }
+
+        return 0;
+
+    }*/
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = View.inflate(context, R.layout.item_layout_jokes, null);
+      /*  if(viewType==0){
+            view = View.inflate(context, R.layout.item_layout_jokes, null);
+        }else if(viewType==1){
+            view = View.inflate(context, R.layout.item_layout_jokes_image1, null);
+        }else if(viewType==2){
+            view = View.inflate(context, R.layout.item_layout_jokes_image2, null);
+        }else if(viewType==3){
+            view = View.inflate(context, R.layout.item_layout_jokes_image3, null);
+        }else if(viewType==4){
+            view = View.inflate(context, R.layout.item_layout_jokes_image4, null);
+        }else if(viewType==5){
+            view = View.inflate(context, R.layout.item_layout_jokes_image5, null);
+        }else if(viewType==6){
+            view = View.inflate(context, R.layout.item_layout_jokes_image6, null);
+        }else if(viewType==7){
+            view = View.inflate(context, R.layout.item_layout_jokes_image7, null);
+        }else if(viewType==8){
+            view = View.inflate(context, R.layout.item_layout_jokes_image8, null);
+        }else if(viewType==9){
+            view = View.inflate(context, R.layout.item_layout_jokes_image9, null);
+        }*/
+        View view; view = View.inflate(context, R.layout.item_layout_jokes, null);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -53,24 +121,59 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-        Glide.with(context).load(list.get(position).user.icon).into(holder.ivHeadImg);
-        holder.tvNickname.setText(list.get(position).user.nickname);
-        holder.tvDate.setText(list.get(position).createTime);
-        holder.tvMessage.setText(list.get(position).content);
+        RequestOptions option = new RequestOptions().placeholder(R.drawable.loading_02);
+        Glide.with(context).load(list.get(position).user.icon).apply(option).into(holder.ivHeadImg);
+            holder.tvNickname.setText(list.get(position).user.nickname);
+            holder.tvDate.setText(list.get(position).createTime);
+            holder.tvMessage.setText(list.get(position).content);
+            String imgUrls = list.get(position).imgUrls;
+        /*WindowManager manager = (WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE);
+        int width = manager.getDefaultDisplay().getWidth();
+        int height = 0;*/
+        System.out.println("图片集合===="+imgUrls);
+        GridLayoutManager manager=null;
+        if(!TextUtils.isEmpty(imgUrls)){
+            String[] split = imgUrls.split("\\|");
+            if(split.length==1){
+                manager = new GridLayoutManager(context,1);
+            }else if (split.length==2){
+                manager = new GridLayoutManager(context,2);
+            }else if (split.length == 3){
+                manager = new GridLayoutManager(context,2);
+            }else if(split.length==4){
+                manager = new GridLayoutManager(context,2);
+            }else if(split.length == 5){
+                manager = new GridLayoutManager(context,2);
+            }else if(split.length == 6){
+                manager = new GridLayoutManager(context,3);
+            }else if(split.length == 7){
+                manager = new GridLayoutManager(context,3);
+            }else if(split.length == 8){
+                manager = new GridLayoutManager(context,3);
+            }else if(split.length == 9){
+                manager = new GridLayoutManager(context,3);
+            }
+
+            holder.mGridView.setLayoutManager(manager);
+            holder.mGridView.setAdapter(new GridImageListAdapter(split,context));
+        }
+
+
+
+
 
 
         holder.menu_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                float menu_addx = holder.menu_add.getX();
-                float llreportx = holder.llreport.getX();
-                float llcopyurlx = holder.llcopyurl.getX();
-                float llshieldx = holder.llshield.getX();
+                final float menu_addx = holder.menu_add.getX();
+                final float llreportx = holder.llreport.getX();
+                final float llcopyurlx = holder.llcopyurl.getX();
+                final float llshieldx = holder.llshield.getX();
                 holder.llshield.setX(llshieldx);
                 holder.llcopyurl.setX(llcopyurlx);
                 holder.llreport.setX(llreportx);
-
                 if (!isOpen) {
 
                     /*confirm.setVisibility(VISIBLE);
@@ -86,11 +189,14 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
                     ObjectAnimator animatorConfirm = ObjectAnimator.ofFloat(holder.llreport, "translationX", 0);
                     ObjectAnimator animatorEdit = ObjectAnimator.ofFloat( holder.llcopyurl, "translationX", 0);
                     ObjectAnimator animatorSend = ObjectAnimator.ofFloat( holder.llshield, "translationX", 0);
-
+                    ObjectAnimator alphaConfirm = ObjectAnimator.ofFloat(holder.llreport, "alpha", 0.1f,1f);
+                    ObjectAnimator alphatorEdit = ObjectAnimator.ofFloat( holder.llcopyurl, "alpha", 0.1f,1f);
+                    ObjectAnimator alphatorSend = ObjectAnimator.ofFloat( holder.llshield, "alpha", 0.1f,1f);
                     AnimatorSet animatorSet = new AnimatorSet();
-                    animatorSet.setDuration(400);
+                    animatorSet.setDuration(500);
                     animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
                     animatorSet.playTogether(animatorConfirm, animatorEdit, animatorSend);
+                    animatorSet.playTogether(alphaConfirm, alphatorEdit, alphatorSend);
                     animatorSet.start();
                     isOpen = true;
                 } else {
@@ -100,10 +206,14 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
                     ObjectAnimator animatorConfirm = ObjectAnimator.ofFloat(holder.llreport, "translationX", menu_addx - llreportx);
                     ObjectAnimator animatorEdit = ObjectAnimator.ofFloat(holder.llcopyurl, "translationX", menu_addx - llcopyurlx);
                     ObjectAnimator animatorSend = ObjectAnimator.ofFloat(holder.llshield, "translationX", menu_addx - llshieldx);
+                    ObjectAnimator alphaConfirm = ObjectAnimator.ofFloat(holder.llreport, "alpha", 1f,0.1f);
+                    ObjectAnimator alphatorEdit = ObjectAnimator.ofFloat( holder.llcopyurl, "alpha", 1f,0.1f);
+                    ObjectAnimator alphatorSend = ObjectAnimator.ofFloat( holder.llshield, "alpha", 1f,0.1f);
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.setDuration(400);
                     animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
                     animatorSet.playTogether(animatorConfirm, animatorEdit, animatorSend);
+                    animatorSet.playTogether(alphaConfirm, alphatorEdit, alphatorSend);
                     animatorSet.start();
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         @Override
@@ -162,8 +272,10 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
         LinearLayout llcopyurl;
         LinearLayout llreport ;
         LinearLayout llshield;
-
-
+        RecyclerView mGridView;
+        TextView tvPl;
+        TextView tvFx;
+        TextView tvGz;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -176,6 +288,11 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
             llcopyurl=itemView.findViewById(R.id.ll_ly);
             llreport = itemView.findViewById(R.id.ll_fx);
             llshield = itemView.findViewById(R.id.ll_sc);
+            mGridView = itemView.findViewById(R.id.mGridview);
+            tvFx = itemView.findViewById(R.id.tv_fx);
+            tvPl = itemView.findViewById(R.id.tv_pl);
+            tvGz = itemView.findViewById(R.id.tv_gz);
+
         }
     }
 

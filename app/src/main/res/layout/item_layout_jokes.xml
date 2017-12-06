@@ -142,12 +142,10 @@
             android:layout_below="@+id/rl"
             android:textSize="@dimen/x40"
             android:ellipsize="end"
-            android:lines="5"
             android:textColor="@color/textColor_333"
             android:layout_marginTop="@dimen/x20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/jokes"
             />
 
     <android.support.v7.widget.RecyclerView

@@ -77,12 +77,22 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
         holder.tvcollect.setText(notSimple1+"");
         int notSimple2 = RandomUtil.getNotSimple(in, 4);
         holder.tvattention.setText(notSimple2+"");
+        String videoUrl = data.get(position).videoUrl;
+        String substring = videoUrl.substring(22);
+        System.out.println("切割=="+substring);
         System.out.println("=======视频地址"+data.get(position).videoUrl);
-        holder.app_video_box.setUp(data.get(position).videoUrl
-                , JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, "饺子闭眼睛");
-        // jzVideoPlayerStandard.thumbImageView.setImage("http://p.qpic.
-        //holder.app_video_box.thumbImageView.setImageURI("");
-       // holder.app_video_box.thumbImageView;
+        if(holder.app_video_box!=null){
+            holder.app_video_box.setUp("http://120.27.23.105"+substring
+                    , JZVideoPlayerStandard.SCREEN_WINDOW_LIST, "视频"+data.get(position).workDesc);
+
+
+
+            Glide.with(context).load(data.get(position).cover).into(holder.app_video_box.thumbImageView);
+        }
+
+//init player
+
+
         holder.ivcollect.setOnClickListener(new View.OnClickListener() {//关注
             @Override
             public void onClick(View v) {
@@ -103,6 +113,7 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
         holder.menu_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 float menu_addx = holder.menu_add.getX();
                 float llreportx = holder.llreport.getX();
                 float llcopyurlx = holder.llcopyurl.getX();

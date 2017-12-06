@@ -19,7 +19,10 @@ public static final int *;
       **[] $VALUES;
       public *;
     }
-
+    #=============================百度地图========================#
+-keep class com.baidu.** {*;}
+-keep class vi.com.** {*;}
+-dontwarn com.baidu.**
 #=============================短信验证登录========================#
 -dontwarn com.mob.**
 -keep class com.mob.**{*;}

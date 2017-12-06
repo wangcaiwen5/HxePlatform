@@ -141,7 +141,6 @@
         android:layout_height="wrap_content"
         android:text="今天天气不错啊"
         />
-
     <cn.jzvd.JZVideoPlayerStandard
         android:id="@+id/app_video_box"
         android:layout_marginLeft="@dimen/x30"

@@ -4,6 +4,7 @@ import android.provider.SyncStateContract;
 
 import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.utils.AppUtils;
+import com.hxe.hxeplatform.utils.NetUtils;
 import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import okhttp3.CacheControl;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -31,6 +33,7 @@ public class HttpInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
 
+        boolean internetConnection = NetUtils.isInternetConnection(BaseApplication.getContext());//网络连接状态
         String token = SharedPreferencesUtils.getInstance(BaseApplication.getContext()).getString("token");
         String appVersionCode = AppUtils.getAppVersionCode(BaseApplication.getContext());
         System.out.println("appVersionCode==="+appVersionCode);
@@ -49,19 +52,48 @@ public class HttpInterceptor implements Interceptor {
 
         //get请求的封装
         if(method.equals("GET")){
+
+
+
             //获取到请求地址api
             HttpUrl httpUrlurl = request.url();
-            HashMap<String, Object> rootMap = new HashMap<>();
-            //通过请求地址(最初始的请求地址)获取到参数列表
-            Set<String> parameterNames = httpUrlurl.queryParameterNames();
             String url = httpUrlurl.toString();
             System.out.println("拦截器修改前url=="+url);
             String newUrl=url;
             for (Map.Entry<String, Object> entry : hashmap.entrySet()) {
               newUrl+= entry.getKey()+"="+entry.getValue()+"&&";
             }
-            System.out.println("拦截后的url=="+newUrl);
-            request = request.newBuilder().url(newUrl).build();  //重新构建请求
+
+            if(!internetConnection){
+                //如果没有网络,从缓存获取数据
+                request = request.newBuilder()
+                        .cacheControl(CacheControl.FORCE_CACHE)
+                        .build();
+                System.out.println("网络关闭,读取缓存");
+                System.out.println("网络关闭==="+newUrl);
+            }
+
+            if(internetConnection){
+                //有网络,缓存时间段,缓存60s
+                System.out.println("有网络,设置缓存90s");
+                String cacheControl = request.cacheControl().toString();
+                request = request.newBuilder()
+                        .removeHeader("pragma")
+                        .header("Cache-Control","public, max-age=10")
+                        .url(newUrl)
+                        .build();  //重新构建请求
+
+            }else{
+                System.out.println("网络关闭,缓存cache");
+                int cacheTime=60*60*60*60;
+                request = request.newBuilder().header("Cache-Control","public, only-if-cached, max-stale="+cacheTime)
+                        .removeHeader("pragma")
+                        .url(newUrl)
+                        .build();
+            }
+           /* request = request.newBuilder()
+                    .url(newUrl)
+                    .build();*/
 
         }else if (method.equals("POST")){
             FormBody.Builder builder = new FormBody.Builder();
@@ -94,6 +126,6 @@ public class HttpInterceptor implements Interceptor {
 
         }
 
-        return chain.proceed(request);
+        return  chain.proceed(request);
     }
 }

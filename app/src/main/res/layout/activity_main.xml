@@ -9,40 +9,15 @@
     tools:context="com.hxe.hxeplatform.ui.activity.MainActivity">
 >
 
+      <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+          <include layout="@layout/layout_main"></include>
+
+      </FrameLayout>
 
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <com.hxe.hxeplatform.myview.MyMainToolBar
-            android:id="@+id/m_maintoolbar"
-            android:layout_marginTop="0dp"
-            android:background="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></com.hxe.hxeplatform.myview.MyMainToolBar>
-
-        <FrameLayout
-            android:id="@+id/fl_Container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" >
-        </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorLineNarrow"
-            />
-
-        <com.ashokvarma.bottomnavigation.BottomNavigationBar
-            android:id="@+id/bottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"/>
-
-    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/rl_left_menu"

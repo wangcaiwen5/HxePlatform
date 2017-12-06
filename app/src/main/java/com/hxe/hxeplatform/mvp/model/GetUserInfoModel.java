@@ -20,7 +20,7 @@ public class GetUserInfoModel {
     public void getUserInfo(String uid){
         Map<String, String> map = new HashMap<>();
         map.put("uid",uid);
-        RetrofitManager.getInstance(BaseApplication.getContext()).createBaseApi().requestData(Api.GET_USER_INFO, map, new RetrofitManager.MyShowCallBack() {
+        RetrofitManager.getInstance(BaseApplication.getContext()).createBaseApi().login(Api.GET_USER_INFO, map, new RetrofitManager.MyShowCallBack() {
             @Override
             public void onError(Throwable e) {
                 mGetInfo.onError(e);

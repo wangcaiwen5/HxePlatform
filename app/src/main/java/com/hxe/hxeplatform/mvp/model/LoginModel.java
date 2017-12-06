@@ -24,7 +24,7 @@ public class LoginModel{
         Map<String, String> map = new HashMap<>();
         map.put("mobile",username);
         map.put("password",password);
-        RetrofitManager.getInstance(BaseApplication.getContext()).createBaseApi().requestData(Api.LOGIN_API, map, new RetrofitManager.MyShowCallBack() {
+        RetrofitManager.getInstance(BaseApplication.getContext()).createBaseApi().login(Api.LOGIN_API, map, new RetrofitManager.MyShowCallBack() {
             @Override
             public void onError(Throwable e) {
                 mLogin.mLoginError(e);

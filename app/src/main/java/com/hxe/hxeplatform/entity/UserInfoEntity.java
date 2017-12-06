@@ -42,25 +42,25 @@ public class UserInfoEntity {
          * username : 18813146920
          */
 
-        public Object age;
-        public Object appkey;
-        public Object appsecret;
+        public String age;
+        public String appkey;
+        public String appsecret;
         public String createtime;
-        public Object email;
+        public String email;
         public int fans;
         public int follow;
         public int gender;
         public String icon;
-        public Object latitude;
-        public Object longitude;
+        public String latitude;
+        public String longitude;
         public String mobile;
         public int money;
         public String nickname;
         public String password;
-        public Object praiseNum;
+        public String praiseNum;
         public String token;
         public int uid;
-        public Object userId;
+        public String userId;
         public String username;
     }
 }

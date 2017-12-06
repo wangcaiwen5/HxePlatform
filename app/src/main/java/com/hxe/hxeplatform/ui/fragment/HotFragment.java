@@ -22,7 +22,9 @@ import com.hxe.hxeplatform.mvp.view.GetVideosListView;
 import com.hxe.hxeplatform.ui.activity.LoginActivity;
 import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.mingle.widget.LoadingView;
 import com.stx.xhb.xbanner.XBanner;
 
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
     @BindView(R.id.rv_list)
     XRecyclerView recyclerView;
     @BindView(R.id.pb_hotProgress)
-    ProgressBar hotProgress;
+    LoadingView hotProgress;
     private XBanner xbanner;
     private  int page=1;
     private MyHotAdapter adapter;
@@ -87,6 +89,8 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
         View view = View.inflate(getActivity(), R.layout.xbanner_layout, null);
         xbanner = view.findViewById(R.id.xb_banner);
         initBannerData();
+        recyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        recyclerView.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);
         recyclerView.addHeaderView(view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -159,12 +163,12 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
 
     @Override
     public void hideProgressBar() {
-        hotProgress.setVisibility(View.INVISIBLE);
+        hotProgress.setVisibility(View.GONE);
     }
 
     @Override
     public void ShowProgressBar() {
-        hotProgress.setVisibility(View.GONE);
+        hotProgress.setVisibility(View.VISIBLE);
     }
 
     @Override

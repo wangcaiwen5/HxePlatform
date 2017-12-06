@@ -4,6 +4,7 @@ package com.hxe.hxeplatform.ui.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,12 +13,18 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.baidu.location.Address;
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.FullyGridLayoutManager;
 import com.hxe.hxeplatform.adapter.GridImageAdapter;
 import com.hxe.hxeplatform.adapter.GridVideoAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.base.BasePresenter;
+import com.hxe.hxeplatform.location.MyLocationListener;
 import com.hxe.hxeplatform.mvp.presenter.UpLoadVideoPresenter;
 import com.hxe.hxeplatform.mvp.view.UpLoadVideoView;
 import com.hxe.hxeplatform.myview.MyToolBar;
@@ -53,6 +60,9 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
     @BindView(R.id.pb_videoLoading)
     ProgressBar videoLoading;
 
+    public LocationClient mLocationClient = null;
+    private MyLocationListener myListener = new MyLocationListener();
+
     private GridVideoAdapter adapter;
     private List<LocalMedia> selectList = new ArrayList<>();
     private int maxSelectNum = 1;
@@ -70,7 +80,67 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
 
     @Override
     protected void init() {
+        initLocation();
         initData();
+    }
+
+    private void initLocation() {
+        //声明LocationClient类
+        mLocationClient = new LocationClient(getApplicationContext());
+
+        //注册监听函数
+        mLocationClient.registerLocationListener(myListener);
+
+
+        LocationClientOption option = new LocationClientOption();
+
+        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
+//可选，设置定位模式，默认高精度
+//LocationMode.Hight_Accuracy：高精度；
+//LocationMode. Battery_Saving：低功耗；
+//LocationMode. Device_Sensors：仅使用设备；
+
+        option.setCoorType("bd09ll");
+//可选，设置返回经纬度坐标类型，默认gcj02
+//gcj02：国测局坐标；
+//bd09ll：百度经纬度坐标；
+//bd09：百度墨卡托坐标；
+//海外地区定位，无需设置坐标类型，统一返回wgs84类型坐标
+
+        option.setScanSpan(0);
+//可选，设置发起定位请求的间隔，int类型，单位ms
+//如果设置为0，则代表单次定位，即仅定位一次，默认为0
+//如果设置非0，需设置1000ms以上才有效
+
+        option.setOpenGps(true);
+//可选，设置是否使用gps，默认false
+//使用高精度和仅用设备两种定位模式的，参数必须设置为true
+
+        option.setLocationNotify(true);
+//可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false
+
+        option.setIgnoreKillProcess(true);
+//可选，定位SDK内部是一个service，并放到了独立进程。
+//设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
+
+        option.SetIgnoreCacheException(false);
+//可选，设置是否收集Crash信息，默认收集，即参数为false
+
+      /*  option.setWifiCacheTimeOut();
+        option.setWifiValidTime(5*60*1000);*/
+//可选，7.2版本新增能力
+//如果设置了该接口，首次启动定位时，会先判断当前WiFi是否超出有效期，若超出有效期，会先重新扫描WiFi，然后定位
+
+        option.setEnableSimulateGps(false);
+//可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
+
+        mLocationClient.setLocOption(option);
+//mLocationClient为第二步初始化过的LocationClient对象
+//需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+//更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
+        mLocationClient.start();
+       // mLocationClient.requestLocation();
+
     }
 
     private void initData() {
@@ -90,20 +160,33 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
     myToolBar.setRightTitleClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             System.out.println("=======视频上传");
-            String uid = SharedPreferencesUtils.getInstance(getApplicationContext()).getString("uid");
-            /*MediaMetadataRetriever media = new MediaMetadataRetriever();
-
-            media.setDataSource(selectList.get(0).getPath());
-            Bitmap frameAtTime = media.getFrameAtTime();*/
-
+            String latitude = SharedPreferencesUtils.getInstance(getApplicationContext()).getString("latitude");
+            String longitude = SharedPreferencesUtils.getInstance(getApplicationContext()).getString("longitude");
+            final String uid = SharedPreferencesUtils.getInstance(getApplicationContext()).getString("uid");
+            System.out.println("纬度:"+latitude+"==经度:"+longitude);
+            if(selectList.size()<=0){
+                ToastShow.getSingleton(getApplicationContext()).showToast("请添加视频");
+            }
             mPresenter.UpLoadVideoData(uid,
                     new File(selectList.get(0).getPath()),
                     new File("/storage/sdcard0/yyyy.png"),
                     editText.getText().toString(),
-                    "1212",
-                    "12121"
+                    latitude,
+                    longitude
             );
+
+            MediaMetadataRetriever media = new MediaMetadataRetriever();
+
+            media.setDataSource(selectList.get(0).getPath());
+            Bitmap frameAtTime = media.getFrameAtTime();
+
+
+
+
+
+
         }
     });
 
@@ -249,7 +332,7 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
                 ToastShow.getSingleton(getApplicationContext()).showToast(msg);
                 finish();
             }else if(code.equals("2")){
-                ToastShow.getSingleton(getApplicationContext()).showToast(msg+",请重新登录");
+                ToastShow.getSingleton(getApplicationContext()).showToast("登录失效,请重新登录");
                 gotoActivity(LoginActivity.class,true);
             }else{
                 ToastShow.getSingleton(getApplicationContext()).showToast(msg);
@@ -258,6 +341,12 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationClient.unRegisterLocationListener(myListener);
     }
 
     @Override

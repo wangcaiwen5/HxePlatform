@@ -1,12 +1,14 @@
 package com.hxe.hxeplatform.rxretrofit.http;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 
 import com.hxe.hxeplatform.rxretrofit.common.BaseApi;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +18,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Cache;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -36,6 +39,10 @@ public class RetrofitManager {
 
     private BaseApiService baseApiService;
     private static OkHttpClient okHttpClient;
+    private static final long cacheSize = 1024 * 1024 * 20;// 缓存文件最大限制大小20M
+    private static String cacheDirectory = Environment.getExternalStorageDirectory() + "/okttpcaches"; // 设置缓存文件路径
+    private static Cache cache = new Cache(new File(cacheDirectory), cacheSize);  //
+
     public static String baseUrl= BaseApi.BASE_URL;
     private static Context mContext;
     //private static RetrofitManager retrofitInstance;;
@@ -68,9 +75,12 @@ public class RetrofitManager {
 
 
          okHttpClient = new OkHttpClient.Builder()
-             .addInterceptor(new HttpInterceptor())
-               //  .addNetworkInterceptor(new HttpInterceptor())
-                .connectTimeout(30, TimeUnit.SECONDS)//链接超时
+                .addInterceptor(new HttpInterceptor())
+                // .addNetworkInterceptor(new LogInterceptor())
+                .connectTimeout(60*5, TimeUnit.SECONDS)//链接超时
+                .writeTimeout(30, TimeUnit.SECONDS)// 设置写入超时时间
+                .readTimeout(30, TimeUnit.SECONDS)// 设置读取数据超时时间
+                 .cache(cache)
                 .build();
 
         retrofit=new Retrofit.Builder()
@@ -93,6 +103,38 @@ public class RetrofitManager {
         return retrofit.create(service1);
 
     }
+
+    public void login(String url,  Map<String,String> body,final MyShowCallBack myShowCallBack){
+
+        Observable<ResponseBody> responseBodyObservable = baseApiService.loginPost(url,body);
+
+        responseBodyObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseBody s) {
+                myShowCallBack.onSuccess(s);
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                myShowCallBack.onError(e);
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+
+
+    }
+
 
     public void moreUploadFile(String url, List<MultipartBody.Part> parts,final MyShowCallBack myShowCallBack){
 

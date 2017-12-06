@@ -36,6 +36,7 @@ import com.hxe.hxeplatform.rxretrofit.http.RetrofitManager;
 import com.hxe.hxeplatform.ui.fragment.JokesFragment;
 import com.hxe.hxeplatform.ui.fragment.RecommendFragment;
 import com.hxe.hxeplatform.ui.fragment.VideoFragment;
+import com.hxe.hxeplatform.utils.NetUtils;
 import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 
@@ -110,7 +111,14 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
     protected void onResume() {
         super.onResume();
         System.out.println("加载头像");
+
         initHeadImg();
+        boolean internetConnection = NetUtils.isInternetConnection(this);
+        if(internetConnection){
+            ToastShow.getSingleton(this).showToast("网络已连接");
+        }else{
+            ToastShow.getSingleton(this).showToast("网络异常");
+        }
     }
 
 
@@ -127,6 +135,7 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
         ivHead.setOnClickListener(this);
 
         // final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        mToolbar.setLeftHeadImgDrawable(R.mipmap.headimg);
         mToolbar.setMainTitle("推荐");
         mToolbar.setRightTitleDrawable(R.mipmap.write);
 
@@ -261,6 +270,7 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
 
     @Override
     public void onSuccess(ResponseBody body) {
+
         Gson gson =new Gson();
         try {
             UserInfoEntity userInfoEntity = gson.fromJson(body.string(), UserInfoEntity.class);
@@ -269,15 +279,6 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
             UserInfoEntity.DataBean data = userInfoEntity.data;
             String icon = data.icon;
             if(code.equals("0")){
-                String token = SharedPreferencesUtils.getInstance(getApplicationContext()).getString("token");
-                System.out.println("token1=="+token);
-                System.out.println("token2=="+data.token);
-                if(token!=null){
-                    if(!token.equals(data.token)){
-                        ToastShow.getSingleton(getApplicationContext()).showToast("登录失效,请重新登录");
-                        gotoActivity(LoginActivity.class,true);
-                    }
-                }
                 RequestOptions option = new RequestOptions().placeholder(R.drawable.loading_02).diskCacheStrategy(DiskCacheStrategy.NONE);
                 Glide.with(BaseApplication.getContext()).load(icon).apply(option).into(ivHead);
                 mToolbar.setUrlLeftCircleImageView(icon);

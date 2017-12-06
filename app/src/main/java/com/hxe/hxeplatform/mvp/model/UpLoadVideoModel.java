@@ -37,10 +37,10 @@ public class UpLoadVideoModel {
                .addFormDataPart("longitude",longitude)
                .addFormDataPart("videoDesc",videoDesc);
 
-       RequestBody requestBody=RequestBody.create(MediaType.parse("multipart/form-data"),videoFile);
+       RequestBody requestBody=RequestBody.create(MediaType.parse("video/*"),videoFile);
        RequestBody requestBody1=RequestBody.create(MediaType.parse("multipart/form-data"),coverFile);
-       builder.addFormDataPart("coverFile",videoFile.getName(),requestBody1);
        builder.addFormDataPart("videoFile",videoFile.getName(),requestBody);
+       builder.addFormDataPart("coverFile",videoFile.getName(),requestBody1);
        List<MultipartBody.Part> parts = builder.build().parts();
 
        RetrofitManager.getInstance(BaseApplication.getContext()).createBaseApi().moreUploadFile(Api.PUBLISTSH_VIDEO,

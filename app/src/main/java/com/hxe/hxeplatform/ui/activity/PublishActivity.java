@@ -327,7 +327,8 @@ public class PublishActivity extends BaseActivity<UploadPresenter> implements Vi
             if(code.equals("0")){
                 ToastShow.getSingleton(PublishActivity.this).showToast(msg);
                 finish();
-            }else{
+            }else if (code.equals("2")){
+                gotoActivity(LoginActivity.class,true);
                 ToastShow.getSingleton(PublishActivity.this).showToast(msg);
             }
         } catch (Exception e) {

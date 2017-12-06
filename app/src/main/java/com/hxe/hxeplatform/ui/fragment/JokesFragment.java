@@ -17,6 +17,7 @@ import com.hxe.hxeplatform.mvp.presenter.JokesListPresenter;
 import com.hxe.hxeplatform.mvp.view.JokesListView;
 import com.hxe.hxeplatform.utils.ToastShow;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.mingle.widget.LoadingView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class JokesFragment extends BaseFragment<JokesListPresenter> implements X
     @BindView(R.id.rv_jokesList)
     XRecyclerView recyclerView;
     @BindView(R.id.pb_loading)
-    ProgressBar progressBar;
+    LoadingView progressBar;
     private MyJokesAdapter adapter;
     private int page=1;
     private List<JokesEntity.DataBean> data;

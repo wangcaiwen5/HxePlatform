@@ -19,8 +19,6 @@ public class VideoFragment extends BaseFragment {
         return R.layout.fragment_video_layout;
     }
 
-
-
     @Override
     protected void init() {
 

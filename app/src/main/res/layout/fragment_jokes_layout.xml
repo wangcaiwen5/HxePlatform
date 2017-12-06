@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></com.jcodecraeer.xrecyclerview.XRecyclerView>
 
-    <ProgressBar
+    <com.mingle.widget.LoadingView
         android:id="@+id/pb_loading"
         android:layout_centerVertical="true"
         android:visibility="invisible"

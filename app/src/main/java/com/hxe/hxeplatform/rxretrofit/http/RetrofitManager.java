@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 
+import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.rxretrofit.common.BaseApi;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -39,9 +40,9 @@ public class RetrofitManager {
 
     private BaseApiService baseApiService;
     private static OkHttpClient okHttpClient;
-    private static final long cacheSize = 1024 * 1024 * 20;// 缓存文件最大限制大小20M
+    private static final long cacheSize = 1024 * 1024 * 20;// 缓存文件最大限制大小20
     private static String cacheDirectory = Environment.getExternalStorageDirectory() + "/okttpcaches"; // 设置缓存文件路径
-    private static Cache cache = new Cache(new File(cacheDirectory), cacheSize);  //
+    private static Cache cache = new Cache(new File(BaseApplication.getContext().getCacheDir()+"/okttpcaches"), cacheSize);  //
 
     public static String baseUrl= BaseApi.BASE_URL;
     private static Context mContext;

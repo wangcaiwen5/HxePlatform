@@ -4,10 +4,12 @@
     >
        <TextView
         android:gravity="center"
-        android:layout_width="@dimen/x350"
+        android:layout_width="wrap_content"
         android:id="@+id/TextViewInfo"
         android:layout_height="@dimen/x50"
         android:textSize="@dimen/x30"
+        android:paddingRight="@dimen/x50"
+        android:paddingLeft="@dimen/x50"
         android:text="测试"
         android:background="@drawable/shape_toast_bg"
         android:layout_gravity="center_vertical"

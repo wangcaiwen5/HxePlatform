@@ -15,6 +15,7 @@ import com.hxe.hxeplatform.base.BasePresenter;
 import com.hxe.hxeplatform.entity.JokesEntity;
 import com.hxe.hxeplatform.mvp.presenter.JokesListPresenter;
 import com.hxe.hxeplatform.mvp.view.JokesListView;
+import com.hxe.hxeplatform.utils.NetUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.mingle.widget.LoadingView;
@@ -73,19 +74,31 @@ public class JokesFragment extends BaseFragment<JokesListPresenter> implements X
 
     @Override
     public void onRefresh() {
-        moreList.clear();
-        data.clear();
-        page=1;
-        initData();
-       recyclerView.refreshComplete();
+        if(!NetUtils.isInternetConnection(getActivity())){
+            ToastShow.getSingleton(getActivity()).showToast("网络异常,请检查设置!");
+            recyclerView.refreshComplete();
+        }else{
+            moreList.clear();
+            data.clear();
+            adapter.notifyDataSetChanged();
+            page=1;
+            initData();
+            recyclerView.refreshComplete();
+        }
+
     }
 
     @Override
     public void onLoadMore() {
-        // TODO: 2017/12/3 加载更多有bug
+        if(!NetUtils.isInternetConnection(getActivity())){
+            ToastShow.getSingleton(getActivity()).showToast("网络异常,请检查设置!");
+            recyclerView.loadMoreComplete();
+        }else{
             page++;
             initData();
             recyclerView.loadMoreComplete();
+        }
+
     }
 
     @Override

@@ -4,27 +4,25 @@ package com.hxe.hxeplatform.ui.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.baidu.location.Address;
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
+
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.FullyGridLayoutManager;
-import com.hxe.hxeplatform.adapter.GridImageAdapter;
 import com.hxe.hxeplatform.adapter.GridVideoAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;
-import com.hxe.hxeplatform.base.BasePresenter;
-import com.hxe.hxeplatform.location.MyLocationListener;
+import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.mvp.presenter.UpLoadVideoPresenter;
 import com.hxe.hxeplatform.mvp.view.UpLoadVideoView;
 import com.hxe.hxeplatform.myview.MyToolBar;
@@ -40,8 +38,9 @@ import com.luck.picture.lib.tools.PictureFileUtils;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,7 +48,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
 
-public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> implements UpLoadVideoView {
+public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> implements UpLoadVideoView, AMapLocationListener {
 
     @BindView(R.id.m_VideoToolbar)
     MyToolBar myToolBar;
@@ -60,12 +59,46 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
     @BindView(R.id.pb_videoLoading)
     ProgressBar videoLoading;
 
-    public LocationClient mLocationClient = null;
-    private MyLocationListener myListener = new MyLocationListener();
 
     private GridVideoAdapter adapter;
     private List<LocalMedia> selectList = new ArrayList<>();
     private int maxSelectNum = 1;
+
+
+    //声明mlocationClient对象
+    public AMapLocationClient mlocationClient;
+    //声明mLocationOption对象
+    public AMapLocationClientOption mLocationOption = null;
+
+
+
+
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+        if (amapLocation != null) {
+            if (amapLocation.getErrorCode() == 0) {
+                //定位成功回调信息，设置相关消息
+                amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                double latitude = amapLocation.getLatitude();//获取纬度
+                double longitude = amapLocation.getLongitude();//获取经度
+                String city = amapLocation.getCity();
+                String country = amapLocation.getCountry();
+                System.out.println("city==="+city+"==="+latitude+"====="+longitude+"country==="+country);
+                amapLocation.getAccuracy();//获取精度信息
+                SharedPreferencesUtils.getInstance(BaseApplication.getContext()).putString("latitude",latitude+"");
+                SharedPreferencesUtils.getInstance(BaseApplication.getContext()).putString("longitude",longitude+"");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date(amapLocation.getTime());
+                df.format(date);//定位时间
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                Log.e("AmapError","location Error, ErrCode:"
+                        + amapLocation.getErrorCode() + ", errInfo:"
+                        + amapLocation.getErrorInfo());
+            }
+        }
+    }
+
 
 
     @Override
@@ -85,61 +118,25 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
     }
 
     private void initLocation() {
-        //声明LocationClient类
-        mLocationClient = new LocationClient(getApplicationContext());
+        mlocationClient = new AMapLocationClient(this);
+//初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位监听
+        mlocationClient.setLocationListener(this);
+//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+//设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+        mLocationOption.setNeedAddress(true);
+//设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+// 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+// 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+// 在定位结束后，在合适的生命周期调用onDestroy()方法
+// 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
 
-        //注册监听函数
-        mLocationClient.registerLocationListener(myListener);
-
-
-        LocationClientOption option = new LocationClientOption();
-
-        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
-//可选，设置定位模式，默认高精度
-//LocationMode.Hight_Accuracy：高精度；
-//LocationMode. Battery_Saving：低功耗；
-//LocationMode. Device_Sensors：仅使用设备；
-
-        option.setCoorType("bd09ll");
-//可选，设置返回经纬度坐标类型，默认gcj02
-//gcj02：国测局坐标；
-//bd09ll：百度经纬度坐标；
-//bd09：百度墨卡托坐标；
-//海外地区定位，无需设置坐标类型，统一返回wgs84类型坐标
-
-        option.setScanSpan(0);
-//可选，设置发起定位请求的间隔，int类型，单位ms
-//如果设置为0，则代表单次定位，即仅定位一次，默认为0
-//如果设置非0，需设置1000ms以上才有效
-
-        option.setOpenGps(true);
-//可选，设置是否使用gps，默认false
-//使用高精度和仅用设备两种定位模式的，参数必须设置为true
-
-        option.setLocationNotify(true);
-//可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false
-
-        option.setIgnoreKillProcess(true);
-//可选，定位SDK内部是一个service，并放到了独立进程。
-//设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
-
-        option.SetIgnoreCacheException(false);
-//可选，设置是否收集Crash信息，默认收集，即参数为false
-
-      /*  option.setWifiCacheTimeOut();
-        option.setWifiValidTime(5*60*1000);*/
-//可选，7.2版本新增能力
-//如果设置了该接口，首次启动定位时，会先判断当前WiFi是否超出有效期，若超出有效期，会先重新扫描WiFi，然后定位
-
-        option.setEnableSimulateGps(false);
-//可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
-
-        mLocationClient.setLocOption(option);
-//mLocationClient为第二步初始化过的LocationClient对象
-//需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
-//更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
-        mLocationClient.start();
-       // mLocationClient.requestLocation();
+//启动定位
+        mlocationClient.startLocation();
 
     }
 
@@ -346,7 +343,8 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLocationClient.unRegisterLocationListener(myListener);
+        mlocationClient.stopLocation();
+        mlocationClient.onDestroy();
     }
 
     @Override
@@ -363,4 +361,6 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
     public void onError(Throwable throwable) {
         ToastShow.getSingleton(getApplicationContext()).showToast("上传异常:"+throwable);
     }
+
+
 }

@@ -20,6 +20,7 @@ import com.hxe.hxeplatform.entity.GetVediosListEntity;
 import com.hxe.hxeplatform.mvp.presenter.GetVideosListPresenter;
 import com.hxe.hxeplatform.mvp.view.GetVideosListView;
 import com.hxe.hxeplatform.ui.activity.LoginActivity;
+import com.hxe.hxeplatform.utils.NetUtils;
 import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -52,6 +53,7 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
     private MyHotAdapter adapter;
     private List<GetVediosListEntity.DataBean> data;
     private List<GetVediosListEntity.DataBean> newdata = new ArrayList<>();
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected int getLayoutid() {
@@ -65,7 +67,14 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
         initView();
         initList();
         initData();
+
     }
+
+
+
+
+
+
 
     private void initData() {
         String uid = SharedPreferencesUtils.getInstance(getActivity()).getString("uid");
@@ -83,17 +92,25 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
         return new GetVideosListPresenter(this);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
+    }
 
     private void initList() {
         View view = View.inflate(getActivity(), R.layout.xbanner_layout, null);
         xbanner = view.findViewById(R.id.xb_banner);
         initBannerData();
-        recyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
-        recyclerView.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);
         recyclerView.addHeaderView(view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+
+
+
     }
+
+
 
     private void initBannerData() {
     final List<String> list = new ArrayList<>();
@@ -180,17 +197,29 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
     //刷新
     @Override
     public void onRefresh() {
-        newdata.clear();
-        data.clear();
-        page=1;
-        initData();
-        recyclerView.refreshComplete();
+        if(!NetUtils.isInternetConnection(getActivity())){
+            ToastShow.getSingleton(getActivity()).showToast("网络异常,请检查设置!");
+            recyclerView.refreshComplete();
+        }else{
+            newdata.clear();
+            page=1;
+            initData();
+            data.clear();
+            adapter.notifyDataSetChanged();
+            recyclerView.refreshComplete();
+        }
+
     }
     //加载更多
     @Override
     public void onLoadMore() {
-        page++;
-        initData();
-        recyclerView.loadMoreComplete();
+        if(!NetUtils.isInternetConnection(getActivity())){
+            ToastShow.getSingleton(getActivity()).showToast("网络异常,请检查设置!");
+            recyclerView.loadMoreComplete();
+        }else{
+            page++;
+            initData();
+            recyclerView.loadMoreComplete();
+        }
     }
 }

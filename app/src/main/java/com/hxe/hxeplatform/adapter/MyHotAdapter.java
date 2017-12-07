@@ -9,6 +9,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -25,13 +26,23 @@ import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.entity.GetVediosListEntity;
 import com.hxe.hxeplatform.entity.Item;
+import com.hxe.hxeplatform.rxretrofit.common.Api;
+import com.hxe.hxeplatform.rxretrofit.http.RetrofitManager;
 import com.hxe.hxeplatform.utils.RandomUtil;
+import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.jzvd.JZVideoPlayerStandard;
+import okhttp3.ResponseBody;
 
 /**
  * Author:wangcaiwen
@@ -55,16 +66,17 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+       // LayoutInflater.from(context).inflate()
         View view = View.inflate(context, R.layout.item_hot_layout, null);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         GetVediosListEntity.DataBean.UserBean user = data.get(position).user;
-        holder.tvNickname.setText(user.nickname+" ");
+        holder.tvNickname.setText(user.nickname);
         holder.tvDate.setText(data.get(position).createTime);
         holder.tvMessage.setText(data.get(position).workDesc);
         RequestOptions option = new RequestOptions().placeholder(R.drawable.loading_02).diskCacheStrategy(DiskCacheStrategy.NONE);
@@ -83,29 +95,12 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
         System.out.println("=======视频地址"+data.get(position).videoUrl);
         if(holder.app_video_box!=null){
             holder.app_video_box.setUp("http://120.27.23.105"+substring
-                    , JZVideoPlayerStandard.SCREEN_WINDOW_LIST, "视频"+data.get(position).workDesc);
-
-
-
-            Glide.with(context).load(data.get(position).cover).into(holder.app_video_box.thumbImageView);
+                    , JZVideoPlayerStandard.SCREEN_WINDOW_LIST,
+                    "视频"+data.get(position).workDesc);
+                Glide.with(context).load(data.get(position).cover).into(holder.app_video_box.thumbImageView);
         }
 
-//init player
 
-
-        holder.ivcollect.setOnClickListener(new View.OnClickListener() {//关注
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        holder.ivattention.setOnClickListener(new View.OnClickListener() {//收藏
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
 
@@ -180,9 +175,47 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
 
 
         holder.ivattention.setOnClickListener(new View.OnClickListener() {
+            boolean isSelect=true;
             @Override
-            public void onClick(View v) {
-                ToastShow.getSingleton(context).showToast("已关注");
+            public void onClick(final View v) {
+                if(isSelect){
+                    Map<String, String> map = new HashMap<>();
+                    map.put("uid", SharedPreferencesUtils.getInstance(context).getString("uid"));
+                    map.put("followId",data.get(position).uid+"");
+                    int uid = data.get(position).uid;
+                    System.out.println("uid====="+uid);
+                    RetrofitManager.getInstance(context).login(Api.FOLLW, map, new RetrofitManager.MyShowCallBack() {
+                        @Override
+                        public void onError(Throwable e) {
+                            System.out.println("关注==="+e);
+                        }
+
+                        @Override
+                        public void onSuccess(ResponseBody value) {
+                            try {
+                                JSONObject object = new JSONObject(value.string());
+                                String code = object.getString("code");
+                                String msg = object.getString("msg");
+                                if(code.equals("0")){
+                                    holder.ivattention.setImageResource(R.mipmap.red_gz);
+                                    ToastShow.getSingleton(context).showToast(msg);
+                                }else{
+                                    ToastShow.getSingleton(context).showToast(msg);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+
+                    isSelect=false;
+                }else{
+                    ToastShow.getSingleton(context).showToast("取消关注");
+                    holder.ivattention.setImageResource(R.mipmap.sc);
+                    isSelect=true;
+                }
+
             }
         });
 

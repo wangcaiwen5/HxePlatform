@@ -1,10 +1,7 @@
 package com.hxe.hxeplatform.base;
 
-import android.app.Application;
 import android.content.Context;
 
-import com.baidu.location.LocationClient;
-import com.hxe.hxeplatform.location.MyLocationListener;
 import com.mob.MobApplication;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -19,8 +16,6 @@ import com.tencent.bugly.crashreport.CrashReport;
 
 public class BaseApplication extends MobApplication{
 
-    //BDAbstractLocationListener为7.2版本新增的Abstract类型的监听接口
-//原有BDLocationListener接口暂时同步保留。具体介绍请参考后文中的说明
     private static BaseApplication ourInstance = new BaseApplication();
     private static Context mContext;
     //Application为整个应用保存全局的RefWatcher

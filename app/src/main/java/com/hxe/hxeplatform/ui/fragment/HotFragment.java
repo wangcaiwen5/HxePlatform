@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.MyHotAdapter;
@@ -20,6 +21,7 @@ import com.hxe.hxeplatform.entity.GetVediosListEntity;
 import com.hxe.hxeplatform.mvp.presenter.GetVideosListPresenter;
 import com.hxe.hxeplatform.mvp.view.GetVideosListView;
 import com.hxe.hxeplatform.ui.activity.LoginActivity;
+import com.hxe.hxeplatform.ui.activity.VideoContentActivity;
 import com.hxe.hxeplatform.utils.NetUtils;
 import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
@@ -54,13 +56,17 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
     private List<GetVediosListEntity.DataBean> data;
     private List<GetVediosListEntity.DataBean> newdata = new ArrayList<>();
     private LinearLayoutManager layoutManager;
-
     @Override
     protected int getLayoutid() {
         return R.layout.fragment_hot_layout;
     }
 
-
+    @Override
+    protected void initView() {
+        recyclerView.setPullRefreshEnabled(true);
+        recyclerView.setLoadingMoreEnabled(true);
+        recyclerView.setLoadingListener(this);
+    }
 
     @Override
     protected void init() {
@@ -69,35 +75,15 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
         initData();
 
     }
-
-
-
-
-
-
-
     private void initData() {
         String uid = SharedPreferencesUtils.getInstance(getActivity()).getString("uid");
         mPresenter.getVideosList("0",uid,page+"");
-    }
-
-    private void initView() {
-    recyclerView.setPullRefreshEnabled(true);
-    recyclerView.setLoadingMoreEnabled(true);
-    recyclerView.setLoadingListener(this);
     }
 
     @Override
     protected GetVideosListPresenter getPresenter() {
         return new GetVideosListPresenter(this);
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-    }
-
     private void initList() {
         View view = View.inflate(getActivity(), R.layout.xbanner_layout, null);
         xbanner = view.findViewById(R.id.xb_banner);
@@ -105,8 +91,6 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
         recyclerView.addHeaderView(view);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
-
 
     }
 
@@ -126,29 +110,22 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
             Glide.with(getActivity()).load(list.get(position)).into((ImageView) view);
         }
     });
-
         xbanner.setOnItemClickListener(new XBanner.OnItemClickListener() {
             @Override
             public void onItemClick(XBanner banner, int position) {
                 ToastShow.getSingleton(getActivity()).showToast("点击广告"+position);
             }
         });
-
-
-
-
     }
-
     @Override
     public void onFail(String msg) {
-
     }
 
     @Override
     public void onSuccess(ResponseBody json) {
         Gson gson = new Gson();
         try {
-            String string = json.string();
+            final String string = json.string();
             System.out.println("获取视频list==="+string);
             GetVediosListEntity getVediosListEntity = gson.fromJson(string, GetVediosListEntity.class);
             String code = getVediosListEntity.code;
@@ -172,9 +149,26 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
             }else{
                 ToastShow.getSingleton(getActivity()).showToast(msg);
             }
+
+            /**
+             * 视频推荐列表的点击事件
+             */
+            adapter.setOnItemClickListener(new MyHotAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Bundle bundel = new Bundle();
+                    System.out.println("=============="+string);
+                    bundel.putString("videos",string);
+                    bundel.putInt("position",position-2);
+                    gotoActivity(VideoContentActivity.class,false,bundel);
+                }
+            });
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
 
     }
 

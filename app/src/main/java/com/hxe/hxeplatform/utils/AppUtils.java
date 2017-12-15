@@ -71,7 +71,23 @@ public class AppUtils {
         }
         return versioncode+"";
     }
-
+    /**
+     * get App versionName
+     * @param context
+     * @return
+     */
+    public static String getVersionName(Context context){
+        PackageManager packageManager=context.getPackageManager();
+        PackageInfo packageInfo;
+        String versionName="";
+        try {
+            packageInfo=packageManager.getPackageInfo(context.getPackageName(),0);
+            versionName=packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
+    }
 
     /**
      * 获取当前手机系统版本号

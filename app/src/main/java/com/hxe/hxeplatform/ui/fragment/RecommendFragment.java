@@ -36,13 +36,17 @@ public class RecommendFragment extends BaseFragment {
     }
 
 
+    @Override
+    protected void initView() {
+
+    }
 
     @Override
     protected void init() {
-        initView();
+        initData();
     }
 
-    private void initView() {
+    private void initData() {
         timelineViewpager.setAdapter(new TopLineFragmentPageAdapter(getChildFragmentManager(),getActivity()));
         timelineTablayout.setupWithViewPager(timelineViewpager);
     }

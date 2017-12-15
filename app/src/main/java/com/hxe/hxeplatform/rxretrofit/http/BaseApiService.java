@@ -7,6 +7,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -19,6 +20,7 @@ import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 /**
@@ -28,29 +30,22 @@ import retrofit2.http.Url;
  */
 
 public interface BaseApiService {
-
-    /**public ---- 数据内容皆被储存起来，就连有密码保护的网页也储存，安全性很低
-     private ---- 数据内容只能被储存到私有的cache，仅对某个用户有效，不能共享
-     no-cache ---- 可以缓存，但是只有在跟WEB服务器验证了其有效后，才能返回给客户端
-     no-store ---- 请求和响应都禁止被缓存
-     max-age： ----- 本响应包含的对象的过期时间
-     max-stale ---- 允许读取过期时间必须小于max-stale 值的缓存对象。
-     no-transform ---- 告知代理,不要更改媒体类型,比如jpg,被你改成png.
+    @Streaming //大文件时要加不然会OOM
+    @GET
+    Observable<ResponseBody> downloadFile(@Url String fileUrl);
+    /*
      * 以String为参数
      * @param url
      * @param maps
      * @return
      */
     @GET()
-    //@FormUrlEncoded
-  // @Headers("Cache-Control: public, max-age=3600")
     Observable<ResponseBody> executePost(
             @Url String url,
             @QueryMap Map<String, String> maps);
 
     @POST()
     @FormUrlEncoded
-        // @Headers("Cache-Control: public, max-age=3600")
     Observable<ResponseBody> loginPost(
             @Url String url,
             @FieldMap Map<String, String> maps);

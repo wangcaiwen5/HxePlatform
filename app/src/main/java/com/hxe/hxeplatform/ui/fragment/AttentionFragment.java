@@ -39,6 +39,10 @@ public class AttentionFragment extends BaseFragment {
     }
 
 
+    @Override
+    protected void initView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
 
     @Override
     protected void init() {
@@ -55,7 +59,6 @@ public class AttentionFragment extends BaseFragment {
         xbanner = view.findViewById(R.id.xb_banner);
         initBannerData();
         recyclerView.addHeaderView(view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //recyclerView.setAdapter(new MyHotAdapter(getActivity()));
 
     }

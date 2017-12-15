@@ -30,17 +30,20 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment  {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(rootView==null){
             rootView = View.inflate(getActivity(), getLayoutid(), null);
-
+            unbinder = ButterKnife.bind(this, rootView);
+            initView();
         }
         ViewGroup viewGroup = (ViewGroup) rootView.getParent();
         if(viewGroup!=null){
             viewGroup.removeView(rootView);
         }
-        unbinder = ButterKnife.bind(this, rootView);
+
         return rootView;
 
 
     }
+
+    protected abstract void initView();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

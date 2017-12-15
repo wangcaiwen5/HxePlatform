@@ -4,108 +4,108 @@
     android:clickable="true"
     android:background="@color/textColor_white"
     android:layout_height="match_parent">
-<RelativeLayout
-    android:id="@+id/rl"
-    android:background="@mipmap/head_img_bg"
-    android:layout_width="match_parent"
-    android:layout_marginBottom="@dimen/x50"
-    android:layout_height="@dimen/x400">
-    <com.bwie.uploadpicture.view.CircleImageView
-        android:id="@+id/civ_imgView"
-        android:layout_centerVertical="true"
-        android:layout_width="@dimen/x200"
-        android:clickable="true"
-        android:background="@drawable/clickable_item"
-        android:layout_marginLeft="@dimen/x50"
-        android:layout_height="@dimen/x200"
-        android:src="@mipmap/add"
-        />
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:background="@mipmap/head_img_bg"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/x50"
+        android:layout_height="@dimen/x400">
+        <com.bwie.uploadpicture.view.CircleImageView
+            android:id="@+id/civ_imgView"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/x200"
+            android:clickable="true"
+            android:background="@drawable/clickable_item"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_height="@dimen/x200"
+            android:src="@mipmap/add"
+            />
 
-    <TextView
-        android:id="@+id/tv_nikename"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/iv_gender"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_toEndOf="@+id/civ_imgView"
-        android:layout_toRightOf="@+id/civ_imgView"
-        android:text="不熟"
-        android:textColor="@color/textColor_white"
-        android:textSize="@dimen/x50" />
-
-    <ImageView
-        android:id="@+id/iv_gender"
-        android:layout_width="@dimen/x60"
-        android:layout_height="@dimen/x60"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="50dp"
-        android:src="@mipmap/man_a" />
-
-    <TextView
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:background="@drawable/clickable_item"
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="@dimen/x50"
-        android:layout_marginBottom="@dimen/x30"
-        android:layout_alignParentBottom="true"
-        android:textColor="@color/textColor_white"
-        android:layout_height="@dimen/x50"
-        android:text="编辑个性签名"
-        />
-
-</RelativeLayout>
-
-
-       <android.support.v7.widget.RecyclerView
-           android:id="@+id/rv_list"
-           android:layout_below="@+id/rl"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content">
-       </android.support.v7.widget.RecyclerView>
-
-
-
-        <RelativeLayout
-            android:id="@+id/rl2"
-            android:layout_marginLeft="@dimen/x45"
-            android:layout_marginBottom="@dimen/x30"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_nikename"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-           android:layout_above="@+id/rl_layout"
-            >
+            android:layout_alignBottom="@+id/iv_gender"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/civ_imgView"
+            android:layout_toRightOf="@+id/civ_imgView"
+            android:text="不熟"
+            android:textColor="@color/textColor_white"
+            android:textSize="@dimen/x50" />
 
-            <ImageView
-                android:id="@+id/iv_night_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/day" />
+        <ImageView
+            android:id="@+id/iv_gender"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x60"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="50dp"
+            android:src="@mipmap/man_a" />
 
-            <TextView
-                android:id="@+id/tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/x45"
-                android:layout_toRightOf="@+id/iv_night_img"
-                android:text="夜间模式"
-                android:textColor="@color/textColor_333"
-                android:textSize="@dimen/x35" />
+        <TextView
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:background="@drawable/clickable_item"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginBottom="@dimen/x30"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/textColor_white"
+            android:layout_height="@dimen/x50"
+            android:text="编辑个性签名"
+            />
 
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/x45" />
-
+    </RelativeLayout>
 
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_below="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
 
-        </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl2"
+        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginBottom="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_layout"
+        >
+
+        <ImageView
+            android:id="@+id/iv_night_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/day" />
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x45"
+            android:layout_toRightOf="@+id/iv_night_img"
+            android:text="夜间模式"
+            android:textColor="@color/textColor_333"
+            android:textSize="@dimen/x35" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x45" />
+
+
+
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_layout"

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:background="@mipmap/other_login_bg"
+    android:orientation="vertical"
+    android:background="@color/colorEBEBEB"
     android:layout_height="match_parent"
     tools:context="com.hxe.hxeplatform.ui.activity.UserActivity">
 <com.hxe.hxeplatform.myview.MyToolBar
@@ -12,7 +12,186 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"></com.hxe.hxeplatform.myview.MyToolBar>
 
+    <com.bwie.uploadpicture.view.CircleImageView
+        android:id="@+id/clv_MyHeadImg"
+        android:layout_width="@dimen/x150"
+
+        android:src="@mipmap/logo1"
+        android:layout_marginTop="@dimen/x50"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_below="@+id/mToolbar"
+        android:layout_height="@dimen/x150" />
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/clv_MyHeadImg"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/x50"
+        android:layout_below="@+id/mToolbar"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_user_nikename"
+            android:textColor="@color/textColor_333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="昵称"
+            />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:textColor="@color/textColor_333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="男 20岁 北京"
+            />
+        <TextView
+            android:id="@+id/tv_mymessage"
+            android:textColor="@color/textColor_333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="个性签名"
+            />
+    </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_below="@+id/clv_MyHeadImg"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <RelativeLayout
+            android:id="@+id/rl_query_update"
+            android:clickable="true"
+            android:layout_marginTop="@dimen/y30"
+            android:background="@drawable/recyclerview_item"
+            android:layout_width="match_parent"
+            android:padding="@dimen/x30"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/colorLineWide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="检查更新"
+                />
+            <Button
+                android:background="@null"
+                android:clickable="false"
+                android:id="@+id/bt_current_version"
+                android:textColor="@color/colorLineWide"
+                android:drawableRight="@mipmap/gotoright"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="@dimen/x90"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x50"
+                android:text="1.0.1"
+                />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x2"
+            android:background="@color/colorEBEBEB"
+            ></View>
+        <RelativeLayout
+            android:clickable="true"
+            android:background="@drawable/recyclerview_item"
+            android:layout_width="match_parent"
+            android:padding="@dimen/x30"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/colorLineWide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="意见反馈"
+                />
+            <Button
+                android:background="@null"
+                android:clickable="false"
+                android:textColor="@color/colorLineWide"
+                android:drawableRight="@mipmap/gotoright"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="@dimen/x90"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x50"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:clickable="true"
+            android:layout_marginTop="@dimen/y30"
+            android:background="@drawable/recyclerview_item"
+            android:layout_width="match_parent"
+            android:padding="@dimen/x30"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/colorLineWide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关于一刻钟"
+                />
+            <Button
+                android:background="@null"
+                android:clickable="false"
+                android:textColor="@color/colorLineWide"
+                android:drawableRight="@mipmap/gotoright"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="@dimen/x90"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x50"
+                />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x2"
+            android:background="@color/colorEBEBEB"
+            ></View>
+        <RelativeLayout
+            android:id="@+id/rl_clear_cache"
+            android:background="@drawable/recyclerview_item"
+            android:layout_width="match_parent"
+            android:padding="@dimen/x30"
+            android:clickable="true"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/colorLineWide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清除缓存"
+                />
+            <Button
+                android:id="@+id/bt_current_cache"
+                android:background="@null"
+                android:clickable="false"
+                android:textColor="@color/colorLineWide"
+                android:drawableRight="@mipmap/gotoright"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="@dimen/x90"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x50"
+                android:text="17.2M"
+                />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/bt_exit_login"
+            android:textColor="@color/textColor_white"
+            android:layout_marginTop="@dimen/x50"
+            android:background="@drawable/shape_red_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="退出登录"
+            />
+        <ProgressBar
+            android:visibility="invisible"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/pb_query_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

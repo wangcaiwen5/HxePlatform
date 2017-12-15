@@ -54,23 +54,22 @@ public class HttpInterceptor implements Interceptor {
         if(method.equals("GET")){
 
 
-
             //获取到请求地址api
             HttpUrl httpUrlurl = request.url();
             String url = httpUrlurl.toString();
             System.out.println("拦截器修改前url=="+url);
-            String newUrl=url;
+            String newUrl=url+"?";
             for (Map.Entry<String, Object> entry : hashmap.entrySet()) {
-              newUrl+= entry.getKey()+"="+entry.getValue()+"&&";
+              newUrl+= "&"+entry.getKey()+"="+entry.getValue()+"&";
             }
-
+            System.out.println("拦截器修改前url=="+newUrl);
             if(!internetConnection){
                 //如果没有网络,从缓存获取数据
                 request = request.newBuilder()
                         .cacheControl(CacheControl.FORCE_CACHE)
                         .build();
-                System.out.println("网络关闭,读取缓存");
-                System.out.println("网络关闭==="+newUrl);
+
+
             }
 
             if(internetConnection){
@@ -79,7 +78,7 @@ public class HttpInterceptor implements Interceptor {
                 String cacheControl = request.cacheControl().toString();
                 request = request.newBuilder()
                         .removeHeader("pragma")
-                        .header("Cache-Control","public, max-age=10")
+                        .header("Cache-Control","public, max-age=30")
                         .url(newUrl)
                         .build();  //重新构建请求
 

@@ -14,8 +14,9 @@
     <color name="textColor_333">#333333</color>
     <color name="touming">#3ffffffc</color>
     <color name="colorGreen">#5DB254</color>
-    <color name="colorLineNarrow">#cfcfcf</color>
+    <color name="colorLineNarrow">#cecece</color>
     <color name="colorLineWide">#999999</color>
+    <color name="colorEBEBEB">#EBEBEB</color>
 
 
 

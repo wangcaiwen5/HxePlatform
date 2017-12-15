@@ -84,7 +84,7 @@ public class MyMainToolBar extends Toolbar {
     }
 
     public void setUrlLeftCircleImageView(String url){
-        RequestOptions option = new RequestOptions().placeholder(R.drawable.loading_02).diskCacheStrategy(DiskCacheStrategy.NONE);
+        RequestOptions option = new RequestOptions().placeholder(R.mipmap.headimg).diskCacheStrategy(DiskCacheStrategy.NONE);
         Glide.with(BaseApplication.getContext()).load(url).apply(option).into(mLeftCircleImageView);
     }
 

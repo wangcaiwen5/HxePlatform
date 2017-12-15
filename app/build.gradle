@@ -63,6 +63,10 @@ dependencies {
             }
         }
     }
+    //进度条
+    compile 'com.mylhyl:circleDialog:2.2.0'
+    //版本更新
+    compile 'com.allenliu.versionchecklib:library:1.5'
     //你的其他依赖
     implementation name: 'SMSSDK-3.0.0', ext: 'aar'
     implementation name: 'SMSSDKGUI-3.0.0', ext: 'aar'

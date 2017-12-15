@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+
     android:layout_height="wrap_content">
 
   <RelativeLayout
@@ -146,7 +147,6 @@
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginRight="@dimen/x30"
         android:layout_below="@+id/tv_message"
-        android:scaleType="fitXY"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x500"></cn.jzvd.JZVideoPlayerStandard>
 
@@ -224,8 +224,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_comments"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
         android:layout_below="@+id/app_video_box"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
     <View

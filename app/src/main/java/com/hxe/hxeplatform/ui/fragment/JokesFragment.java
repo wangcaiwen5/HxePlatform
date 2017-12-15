@@ -61,7 +61,8 @@ public class JokesFragment extends BaseFragment<JokesListPresenter> implements X
         return new JokesListPresenter(this);
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);

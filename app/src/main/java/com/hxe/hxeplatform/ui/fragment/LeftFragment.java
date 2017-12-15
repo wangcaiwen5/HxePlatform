@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bwie.uploadpicture.view.CircleImageView;
@@ -13,6 +14,7 @@ import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.adapter.MyLeftAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;
 import com.hxe.hxeplatform.base.BasePresenter;
+import com.hxe.hxeplatform.ui.activity.SettingActivity;
 import com.hxe.hxeplatform.ui.activity.UserActivity;
 
 import butterknife.BindView;
@@ -33,7 +35,9 @@ public class LeftFragment extends BaseFragment implements View.OnClickListener{
     RecyclerView rvList;
     @BindView(R.id.civ_imgView)
     CircleImageView mCimageView;
+
     Unbinder unbinder;
+
 
     @Override
     protected int getLayoutid() {
@@ -47,7 +51,8 @@ public class LeftFragment extends BaseFragment implements View.OnClickListener{
         initView();
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvList.setAdapter(new MyLeftAdapter(getActivity()));
         mCimageView.setOnClickListener(this);
@@ -62,9 +67,13 @@ public class LeftFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.civ_imgView:
+           /* case R.id.civ_imgView:
                 gotoActivity(UserActivity.class);
                 break;
+
+            case R.id.bt_setting:
+                gotoActivity(SettingActivity.class);
+                break;*/
         }
     }
 }

@@ -59,60 +59,10 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
     }
 
 
-   /* @Override
-    public int getItemViewType(int position) {
-        String imgUrls = (String) list.get(position).imgUrls;
-        String[] split = imgUrls.split("\\|");
-        if(split.length==0){
-            return FlagUtils.ZERO_TYPE;
-        }else if(split.length==1){
-            return FlagUtils.ONE_TYPE;
-        }else if(split.length==2){
-            return FlagUtils.TWO_TYPE;
-        }else if(split.length==3){
-            return FlagUtils.THREE_TYPE;
-        }else if(split.length==4){
-            return FlagUtils.FOUR_TYPE;
-        }else if(split.length==5){
-            return FlagUtils.FIVE_TYPE;
-        }else if(split.length==6){
-            return FlagUtils.SIX_TYPE;
-        }else if(split.length==7){
-            return FlagUtils.SEVEN_TYPE;
-        }else if(split.length==8){
-            return FlagUtils.EIGHT_TYPE;
-        }else if(split.length==9){
-            return FlagUtils.NINE_TYPE;
-        }
-
-        return 0;
-
-    }*/
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-      /*  if(viewType==0){
-            view = View.inflate(context, R.layout.item_layout_jokes, null);
-        }else if(viewType==1){
-            view = View.inflate(context, R.layout.item_layout_jokes_image1, null);
-        }else if(viewType==2){
-            view = View.inflate(context, R.layout.item_layout_jokes_image2, null);
-        }else if(viewType==3){
-            view = View.inflate(context, R.layout.item_layout_jokes_image3, null);
-        }else if(viewType==4){
-            view = View.inflate(context, R.layout.item_layout_jokes_image4, null);
-        }else if(viewType==5){
-            view = View.inflate(context, R.layout.item_layout_jokes_image5, null);
-        }else if(viewType==6){
-            view = View.inflate(context, R.layout.item_layout_jokes_image6, null);
-        }else if(viewType==7){
-            view = View.inflate(context, R.layout.item_layout_jokes_image7, null);
-        }else if(viewType==8){
-            view = View.inflate(context, R.layout.item_layout_jokes_image8, null);
-        }else if(viewType==9){
-            view = View.inflate(context, R.layout.item_layout_jokes_image9, null);
-        }*/
         View view; view = View.inflate(context, R.layout.item_layout_jokes, null);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
@@ -120,6 +70,9 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+
+
+
 
         RequestOptions option = new RequestOptions().placeholder(R.drawable.loading_02);
         Glide.with(context).load(list.get(position).user.icon).apply(option).into(holder.ivHeadImg);

@@ -105,6 +105,33 @@ public class RetrofitManager {
 
     }
 
+
+    public void downloadFile(String url, final MyShowCallBack myShowCallBack){
+        Observable<ResponseBody> responseBodyObservable = baseApiService.downloadFile(url);
+        responseBodyObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResponseBody s) {
+                myShowCallBack.onSuccess(s);
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                myShowCallBack.onError(e);
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
     public void login(String url,  Map<String,String> body,final MyShowCallBack myShowCallBack){
 
         Observable<ResponseBody> responseBodyObservable = baseApiService.loginPost(url,body);

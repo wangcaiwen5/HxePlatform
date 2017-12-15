@@ -22,6 +22,7 @@ public class GetVediosListEntity {
     public List<DataBean> data;
 
     public static class DataBean {
+        public boolean isOpen=false;
         /**
          * commentNum : 2
          * comments : [{"cid":7,"content":"评论评论评论","createTime":"2017-11-27T23:34:37","jid":null,"mvp":null,"praiseNum":0,"uid":72,"wid":2},{"cid":8,"content":"评论评论评论","createTime":"2017-11-27T23:34:41","jid":null,"mvp":null,"praiseNum":0,"uid":71,"wid":2}]

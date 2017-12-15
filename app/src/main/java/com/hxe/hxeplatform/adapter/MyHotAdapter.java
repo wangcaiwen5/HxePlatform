@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.bwie.uploadpicture.view.CircleImageView;
 import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.entity.GetVediosListEntity;
+import com.hxe.hxeplatform.entity.HotVideoEntity;
 import com.hxe.hxeplatform.entity.Item;
 import com.hxe.hxeplatform.rxretrofit.common.Api;
 import com.hxe.hxeplatform.rxretrofit.http.RetrofitManager;
@@ -51,7 +53,7 @@ import okhttp3.ResponseBody;
  */
 
 public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder> {
-    boolean isOpen = false;
+    boolean isOpen = true;
     boolean isRightShow=true;
     private List<GetVediosListEntity.DataBean> data = null;
     private Context context;
@@ -74,6 +76,13 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        List<GetVediosListEntity.DataBean.CommentsBean> comments = data.get(position).comments;
+        if(comments.size()>0){
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            holder.rvComment.setLayoutManager(layoutManager);
+            holder.rvComment.setAdapter(new CommentsAdapter(context,comments,data));
+        }
+
 
         GetVediosListEntity.DataBean.UserBean user = data.get(position).user;
         holder.tvNickname.setText(user.nickname);
@@ -100,14 +109,23 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
                 Glide.with(context).load(data.get(position).cover).into(holder.app_video_box.thumbImageView);
         }
 
-
-
-
-
+        if(data.get(position).isOpen==false){
+            holder.llreport.setVisibility(View.GONE);
+            holder.llcopyurl.setVisibility(View.GONE);
+            holder.llshield.setVisibility(View.GONE);
+            holder.menu_add.setImageResource(R.mipmap.add);
+        }else{
+            holder.llreport.setVisibility(View.VISIBLE);
+            holder.llcopyurl.setVisibility(View.VISIBLE);
+            holder.llshield.setVisibility(View.VISIBLE);
+            holder.menu_add.setImageResource(R.mipmap.subtract);
+        }
 
         holder.menu_add.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+
 
                 float menu_addx = holder.menu_add.getX();
                 float llreportx = holder.llreport.getX();
@@ -116,11 +134,7 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
                 holder.llshield.setX(llshieldx);
                 holder.llcopyurl.setX(llcopyurlx);
                 holder.llreport.setX(llreportx);
-                if (!isOpen) {
-
-                    /*confirm.setVisibility(VISIBLE);
-                    edit.setVisibility(VISIBLE);
-                    send.setVisibility(VISIBLE);*/
+                if (data.get(position).isOpen==false) {
                     holder.llreport.setVisibility(View.VISIBLE);
                     holder.llcopyurl.setVisibility(View.VISIBLE);
                     holder.llshield.setVisibility(View.VISIBLE);
@@ -140,7 +154,7 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
                     animatorSet.playTogether(animatorConfirm, animatorEdit, animatorSend);
                     animatorSet.playTogether(alphaConfirm,alphatorEdit,alphatorSend);
                     animatorSet.start();
-                    isOpen = true;
+                    data.get(position).isOpen = true;
                 } else {
                     holder.menu_add.animate().rotation(0).setDuration(800).start();
                     holder.menu_add.setImageResource(R.mipmap.add);
@@ -168,17 +182,40 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
                             holder.llshield.setVisibility(View.GONE);
                         }
                     });
-                    isOpen = false;
+                    data.get(position).isOpen = false;
                 }
             }
         });
+        Map<String, String> map = new HashMap<>();
+        map.put("uid", SharedPreferencesUtils.getInstance(context).getString("uid"));
+        map.put("followId",data.get(position).uid+"");
+        RetrofitManager.getInstance(context).login(Api.FOLLW, map, new RetrofitManager.MyShowCallBack() {
+            @Override
+            public void onError(Throwable e) {
+                System.out.println("关注==="+e);
+            }
 
+            @Override
+            public void onSuccess(ResponseBody value) {
+                try {
+                    JSONObject object = new JSONObject(value.string());
+                    String code = object.getString("code");
+                    if(code.equals("1")){
+                        holder.ivattention.setImageResource(R.mipmap.red_gz);
+                    }else{
+                        holder.ivattention.setImageResource(R.mipmap.sc);
 
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         holder.ivattention.setOnClickListener(new View.OnClickListener() {
             boolean isSelect=true;
             @Override
             public void onClick(final View v) {
-                if(isSelect){
+
                     Map<String, String> map = new HashMap<>();
                     map.put("uid", SharedPreferencesUtils.getInstance(context).getString("uid"));
                     map.put("followId",data.get(position).uid+"");
@@ -207,14 +244,10 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
                             }
                         }
                     });
-
-
-                    isSelect=false;
-                }else{
-                    ToastShow.getSingleton(context).showToast("取消关注");
+                    /*ToastShow.getSingleton(context).showToast("取消关注");
                     holder.ivattention.setImageResource(R.mipmap.sc);
-                    isSelect=true;
-                }
+                    isSelect=true;*/
+
 
             }
         });

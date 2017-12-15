@@ -1,6 +1,9 @@
 package com.hxe.hxeplatform.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,9 +16,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.allenliu.versionchecklib.core.AllenChecker;
+import com.allenliu.versionchecklib.core.VersionParams;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.bumptech.glide.Glide;
@@ -32,7 +38,10 @@ import com.hxe.hxeplatform.mvp.presenter.GerUserInfoPresenter;
 import com.hxe.hxeplatform.mvp.view.GetUserInfoView;
 import com.hxe.hxeplatform.myview.MyMainToolBar;
 import com.hxe.hxeplatform.myview.MyToolBar;
+import com.hxe.hxeplatform.rxretrofit.common.Api;
+import com.hxe.hxeplatform.rxretrofit.common.BaseApi;
 import com.hxe.hxeplatform.rxretrofit.http.RetrofitManager;
+import com.hxe.hxeplatform.rxretrofit.http.VersionUpdateService;
 import com.hxe.hxeplatform.ui.fragment.JokesFragment;
 import com.hxe.hxeplatform.ui.fragment.RecommendFragment;
 import com.hxe.hxeplatform.ui.fragment.VideoFragment;
@@ -41,8 +50,10 @@ import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import okhttp3.ResponseBody;
@@ -66,6 +77,8 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
     CircleImageView ivHead;
     @BindView(R.id.iv_gender)
     ImageView ivGender;
+    @BindView(R.id.bt_setting)
+    RadioButton bt_setting;
     @BindView(R.id.rv_list)
     RecyclerView rvList;
     private List<Fragment> fragments = new ArrayList<>();
@@ -85,6 +98,13 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
 
     @Override
     protected void init() {
+        VersionParams.Builder builder = new VersionParams.Builder()
+                .setRequestUrl(BaseApi.BASE_URL+ Api.UPDATE_VERSION_UPDATE)
+                .setCustomDownloadActivityClass(CustomDialogActivity.class)
+                .setService(VersionUpdateService.class);
+        AllenChecker.startVersionCheck(this, builder.build());
+        AllenChecker.init(true);
+
         Glide.with(getApplicationContext()).load("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=311229171,4189910992&fm=27&gp=0.jpg").into(ivHead);
 
         manager = getSupportFragmentManager();
@@ -132,6 +152,7 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
 
     @SuppressLint("ResourceType")
     private void initView() {
+        bt_setting.setOnClickListener(this);
         ivHead.setOnClickListener(this);
 
         // final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -159,11 +180,16 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
 
 
     private void initBottom() {
-        bottomBar.setMode(BottomNavigationBar.MODE_FIXED);
+        bottomBar.setMode(BottomNavigationBar.BACKGROUND_STYLE_DEFAULT);
         bottomBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
-        bottomBar.addItem(new BottomNavigationItem(R.mipmap.recommend_select, "推荐").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.recommend_normal))).setActiveColor(R.color.colorPrimary)
-                .addItem(new BottomNavigationItem(R.mipmap.jokes_select, "段子").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.jokes_normal)))
-                .addItem(new BottomNavigationItem(R.mipmap.video_select, "视频").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.video_normal))).initialise();
+        bottomBar.addItem(new BottomNavigationItem(R.mipmap.recommend_select, "推荐")
+                .setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.recommend_normal)))
+                .setActiveColor(R.color.colorPrimary)
+                .addItem(new BottomNavigationItem(R.mipmap.jokes_select, "段子")
+                        .setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.jokes_normal)))
+                .addItem(new BottomNavigationItem(R.mipmap.video_select, "视频")
+                        .setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.video_normal)))
+                .initialise();
 
         bottomBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
@@ -191,8 +217,6 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
             }
         });
         switchTab(0);
-
-
     }
 
     private void switchTab(int position) {
@@ -263,7 +287,17 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.civ_imgView:
-                gotoActivity(UserActivity.class);
+                Boolean isLogin = SharedPreferencesUtils.getInstance(getApplicationContext()).getBoolean("isLogin");
+                if(isLogin){
+                    gotoActivity(UserActivity.class);
+                }else{
+                    gotoActivity(LoginActivity.class);
+                }
+
+                break;
+
+            case R.id.bt_setting:
+                gotoActivity(SettingActivity.class);
                 break;
         }
     }
@@ -279,7 +313,7 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
             UserInfoEntity.DataBean data = userInfoEntity.data;
             String icon = data.icon;
             if(code.equals("0")){
-                RequestOptions option = new RequestOptions().placeholder(R.drawable.loading_02).diskCacheStrategy(DiskCacheStrategy.NONE);
+                RequestOptions option = new RequestOptions().placeholder(R.mipmap.logo1).diskCacheStrategy(DiskCacheStrategy.NONE);
                 Glide.with(BaseApplication.getContext()).load(icon).apply(option).into(ivHead);
                 mToolbar.setUrlLeftCircleImageView(icon);
             }else{

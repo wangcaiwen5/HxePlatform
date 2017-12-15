@@ -64,7 +64,6 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
     private List<LocalMedia> selectList = new ArrayList<>();
     private int maxSelectNum = 1;
 
-
     //声明mlocationClient对象
     public AMapLocationClient mlocationClient;
     //声明mLocationOption对象
@@ -178,13 +177,7 @@ public class UpLoadVideosActivity extends BaseActivity<UpLoadVideoPresenter> imp
 
             media.setDataSource(selectList.get(0).getPath());
             Bitmap frameAtTime = media.getFrameAtTime();
-
-
-
-
-
-
-        }
+ }
     });
 
         FullyGridLayoutManager manager = new FullyGridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);

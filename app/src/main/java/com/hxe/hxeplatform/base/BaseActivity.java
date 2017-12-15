@@ -12,9 +12,15 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.allenliu.versionchecklib.core.AllenChecker;
+import com.allenliu.versionchecklib.core.VersionParams;
 import com.hxe.hxeplatform.R;
+import com.hxe.hxeplatform.rxretrofit.common.Api;
+import com.hxe.hxeplatform.rxretrofit.common.BaseApi;
+import com.hxe.hxeplatform.rxretrofit.http.VersionUpdateService;
 import com.hxe.hxeplatform.service.IntentService;
 import com.hxe.hxeplatform.service.PushService;
+import com.hxe.hxeplatform.ui.activity.CustomDialogActivity;
 import com.hxe.hxeplatform.utils.ToastShow;
 import com.igexin.sdk.PushManager;
 import com.umeng.analytics.MobclickAgent;
@@ -51,6 +57,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
 
     }
+
+
 
     protected abstract P getPresenter();
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.activity.FollowListActivity">
+
+    <com.hxe.hxeplatform.myview.MyToolBar
+        android:id="@+id/mToolBarFollow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.hxe.hxeplatform.myview.MyToolBar>
+
+
+    <RelativeLayout
+        android:padding="@dimen/y10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.bwie.uploadpicture.view.CircleImageView
+            android:layout_width="@dimen/x100"
+            android:layout_height="@dimen/y100"
+            android:src="@mipmap/logo1"
+            />
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

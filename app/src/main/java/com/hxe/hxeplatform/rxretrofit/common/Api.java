@@ -23,6 +23,6 @@ public class Api {
     public static final String FOLLW="quarter/follow";//关注
     public static final String GET_HOT_VIDEO="quarter/getHotVideos";//关注
     public static final String UPDATE_VERSION_UPDATE="quarter/getVersion";
-
+    public static final String GET_FOLLOW_LIST ="quarter/getFollowUsers";
 //https://www.zhaoapi.cn/quarter/getVersion?token=F7CC2E9C31E04C2862A635FF2182D819&source=android&appVersion=100
 }

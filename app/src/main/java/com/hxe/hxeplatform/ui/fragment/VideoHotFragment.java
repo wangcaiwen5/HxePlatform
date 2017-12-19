@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.MyHotVideoAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;
 import com.hxe.hxeplatform.entity.HotVideoEntity;
@@ -51,6 +51,8 @@ public class VideoHotFragment extends BaseFragment<HotVideoPresenter> implements
         initData();
         initListener();
     }
+
+    
 
     private void initListener() {
 

@@ -8,8 +8,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bwie.uploadpicture.view.CircleImageView;
-import com.hxe.hxeplatform.R;
+
 import com.hxe.hxeplatform.entity.Item;
+import com.onetime.platform.R;
 
 import java.util.ArrayList;
 import java.util.List;

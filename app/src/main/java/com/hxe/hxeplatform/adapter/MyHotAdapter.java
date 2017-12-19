@@ -4,9 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,21 +23,31 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bwie.uploadpicture.view.CircleImageView;
-import com.hxe.hxeplatform.R;
+
+import com.hxe.hxeplatform.utils.ShowToast;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.entity.GetVediosListEntity;
 import com.hxe.hxeplatform.entity.HotVideoEntity;
 import com.hxe.hxeplatform.entity.Item;
 import com.hxe.hxeplatform.rxretrofit.common.Api;
 import com.hxe.hxeplatform.rxretrofit.http.RetrofitManager;
+import com.hxe.hxeplatform.ui.activity.StartActivity;
+import com.hxe.hxeplatform.ui.activity.UserCenterActivity;
 import com.hxe.hxeplatform.utils.RandomUtil;
 import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMVideo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.jzvd.JZVideoPlayerStandard;
+import hxe.com.dialogutils.UpDialog;
 import okhttp3.ResponseBody;
 
 /**
@@ -76,13 +92,17 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        List<GetVediosListEntity.DataBean.CommentsBean> comments = data.get(position).comments;
-        if(comments.size()>0){
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-            holder.rvComment.setLayoutManager(layoutManager);
-            holder.rvComment.setAdapter(new CommentsAdapter(context,comments,data));
-        }
+        final List<GetVediosListEntity.DataBean.CommentsBean> comments = data.get(position).comments;
 
+        //holder.tvComment1.setText(comment);
+
+        holder.ivHeadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,UserCenterActivity.class);
+                context.startActivity(intent);
+            }
+        });
 
         GetVediosListEntity.DataBean.UserBean user = data.get(position).user;
         holder.tvNickname.setText(user.nickname);
@@ -108,6 +128,41 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
                     "视频"+data.get(position).workDesc);
                 Glide.with(context).load(data.get(position).cover).into(holder.app_video_box.thumbImageView);
         }
+
+        holder.ivHeadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserCenterActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
+        holder.llcopyurl.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                copyText(data.get(position).videoUrl);
+
+               scaleAnim(holder.llcopyurl);
+
+            }
+        });
+
+        holder.llreport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastShow.getSingleton(context).showToast("暂未开通此功能");
+                scaleAnim(holder.llreport);
+            }
+        });
+
+        holder.llshield.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastShow.getSingleton(context).showToast("暂未开通此功能");
+                scaleAnim(holder.llshield);
+            }
+        });
 
         if(data.get(position).isOpen==false){
             holder.llreport.setVisibility(View.GONE);
@@ -259,19 +314,38 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
             }
         });
 
+        //分享
         holder.ivshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastShow.getSingleton(context).showToast("已分享");
+
+                UMVideo video = new UMVideo(data.get(position).videoUrl);
+                video.setTitle("分享用户:"+data.get(position).user.nickname);//视频的标题
+                UMImage umimg = new UMImage(context,data.get(position).cover);
+                video.setThumb(umimg);//视频的缩略图
+                video.setDescription("分享"+data.get(position).workDesc);//视频的描述
+                //new ShareAction((Activity) context).withText("hello").withMedia(video).share();
+                new ShareAction((Activity) context)
+                        .withText("hello")
+                        .setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.WEIXIN)
+                        .withMedia(video)
+                        .setCallback(shareListener)
+                        .open();
             }
         });
 
-        holder.ivcomment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastShow.getSingleton(context).showToast("留言");
-            }
-        });
+
+        if(clickListener!=null){
+            holder.ivcomment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickListener.onContentClick(v,holder.getLayoutPosition());
+                }
+            });
+        }
+
+
+
 
 
 //判断是否设置了监听器
@@ -304,6 +378,11 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
         }
     }
 
+
+
+
+
+
     @Override
     public int getItemCount() {
         return data.size();
@@ -327,7 +406,8 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
         ImageView ivshare;
         TextView tvcomment;
         ImageView ivcomment;
-        RecyclerView rvComment;
+        TextView tvComment1;
+        TextView tvComment2;
         JZVideoPlayerStandard app_video_box;
 
 
@@ -349,8 +429,8 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
             ivcomment = itemView.findViewById(R.id.iv_comment);
             tvcomment = itemView.findViewById(R.id.tv_comment);
 
-            rvComment = itemView.findViewById(R.id.rv_comments);
-
+            tvComment1 = itemView.findViewById(R.id.tv_comment1);
+            tvComment2 = itemView.findViewById(R.id.tv_comment2);
 
             menu_add = itemView.findViewById(R.id.iv_isopenMenu);
             tvNickname = itemView.findViewById(R.id.tv_nickname);
@@ -380,4 +460,74 @@ public class MyHotAdapter extends RecyclerView.Adapter<MyHotAdapter.MyViewHolder
     public interface  OnItemlongClickListener{
         void onitemLongClick(View view, int position);
     }
+
+  /*  *
+     * 评论*/
+    private OnContentClickListener clickListener;
+    public void setContentClick(OnContentClickListener clickListener){
+        this.clickListener = clickListener;
+    }
+    public interface OnContentClickListener{
+        void  onContentClick(View view,int position);
+    }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+
+            ShowToast.showToast("分享成功");
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            ShowToast.showToast("分享失败");
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            ShowToast.showToast("分享已取消");
+
+        }
+    };
+
+    private void copyText(String copiedText) {
+        ClipboardManager clipboardManager = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.setPrimaryClip(ClipData.newPlainText(null, copiedText));
+
+        ShowToast.showToast("已复制");
+    }
+
+    private void scaleAnim(View v) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(v, "scaleX", 1f, 1.1f, 1f);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(v, "scaleY", 1f, 1.1f, 1f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animator,animator1);
+        animatorSet.setDuration(1000);
+        animatorSet.start();
+    }
+
+
+
 }

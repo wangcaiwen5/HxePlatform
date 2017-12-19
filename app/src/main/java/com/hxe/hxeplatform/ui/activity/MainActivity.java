@@ -2,6 +2,7 @@ package com.hxe.hxeplatform.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.app.Fragment;
@@ -29,7 +30,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bwie.uploadpicture.view.CircleImageView;
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.hxe.hxeplatform.ui.fragment.FindFragment;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.MyLeftAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.base.BaseApplication;
@@ -48,6 +50,7 @@ import com.hxe.hxeplatform.ui.fragment.VideoFragment;
 import com.hxe.hxeplatform.utils.NetUtils;
 import com.hxe.hxeplatform.utils.SharedPreferencesUtils;
 import com.hxe.hxeplatform.utils.ToastShow;
+import com.umeng.socialize.UMShareAPI;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -120,7 +123,24 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
         adapter.setOnItemClickListener(new MyLeftAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ToastShow.getSingleton(MainActivity.this).showToast("点击了"+position);
+
+                switch (position){
+                    case 0:
+                       gotoActivity(FollowListActivity.class);
+                        break;
+
+                    case 1:
+                        ToastShow.getSingleton(MainActivity.this).showToast("我的收藏");
+                        break;
+
+                    case 2:
+                        ToastShow.getSingleton(MainActivity.this).showToast("搜索好友");
+                        break;
+
+                    case 3:
+                        ToastShow.getSingleton(MainActivity.this).showToast("消息通知");
+                        break;
+                }
             }
         });
 
@@ -180,15 +200,18 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
 
 
     private void initBottom() {
-        bottomBar.setMode(BottomNavigationBar.BACKGROUND_STYLE_DEFAULT);
+        bottomBar.setMode(BottomNavigationBar.MODE_FIXED);
         bottomBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
+        bottomBar.setActiveColor(R.color.colorPrimary)
+                .setInActiveColor(R.color.textColor_999);
         bottomBar.addItem(new BottomNavigationItem(R.mipmap.recommend_select, "推荐")
                 .setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.recommend_normal)))
-                .setActiveColor(R.color.colorPrimary)
                 .addItem(new BottomNavigationItem(R.mipmap.jokes_select, "段子")
                         .setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.jokes_normal)))
                 .addItem(new BottomNavigationItem(R.mipmap.video_select, "视频")
                         .setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.video_normal)))
+
+                .addItem(new BottomNavigationItem(R.mipmap.find_2,"发现"))
                 .initialise();
 
         bottomBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
@@ -243,6 +266,7 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
         fragments.add(new RecommendFragment());
         fragments.add(new JokesFragment());
         fragments.add(new VideoFragment());
+        fragments.add(new FindFragment());
     }
 
     @Override
@@ -323,7 +347,11 @@ public class MainActivity extends BaseActivity<GerUserInfoPresenter> implements 
             e.printStackTrace();
         }
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
     @Override
     public void onFail(String msg) {
 

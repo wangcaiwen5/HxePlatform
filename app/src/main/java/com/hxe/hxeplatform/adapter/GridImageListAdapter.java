@@ -8,13 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-
+import com.onetime.platform.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
-import com.hxe.hxeplatform.R;
 
-import static com.hxe.hxeplatform.R.mipmap.img_loading_fail;
 
 /**
  * Author:wangcaiwen

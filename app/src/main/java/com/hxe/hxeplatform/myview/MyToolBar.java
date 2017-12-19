@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bwie.uploadpicture.view.CircleImageView;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 
 /**
  * Author:wangcaiwen

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.TopLineFragmentPageAdapter;
 import com.hxe.hxeplatform.adapter.VideoFragmentPageAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;

@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,13 +20,21 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bwie.uploadpicture.view.CircleImageView;
-import com.hxe.hxeplatform.R;
+
 import com.hxe.hxeplatform.entity.JokesEntity;
 import com.hxe.hxeplatform.myview.MyGridView;
+import com.hxe.hxeplatform.ui.activity.UserCenterActivity;
+import com.onetime.platform.R;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMVideo;
 
 import java.util.List;
 import java.util.zip.Inflater;
@@ -41,7 +51,7 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
     private Context context;
     private OnItemClickListener mOnItemClickListener;
     private OnItemlongClickListener mOnItemlongClickListener;
-
+    private String[] split;
 
 
     public MyJokesAdapter(Context context,List<JokesEntity.DataBean> list) {
@@ -69,9 +79,15 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-
+        holder.ivHeadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,UserCenterActivity.class);
+                context.startActivity(intent);
+            }
+        });
 
 
         RequestOptions option = new RequestOptions().placeholder(R.drawable.loading_02);
@@ -87,7 +103,7 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
         System.out.println("图片集合===="+imgUrls);
         GridLayoutManager manager=null;
         if(!TextUtils.isEmpty(imgUrls)){
-            String[] split = imgUrls.split("\\|");
+            split = imgUrls.split("\\|");
             if(split.length==1){
                 manager = new GridLayoutManager(context,1);
             }else if (split.length==2){
@@ -113,6 +129,27 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
         }
 
 
+        holder.llreport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UMImage image=null;
+                if(split.length>0) {
+                    image = new UMImage(context, split[0]);//网络图片
+                }else{
+                    image = new UMImage(context, R.mipmap.logo);//资源文件
+                }
+                image.compressStyle = UMImage.CompressStyle.SCALE;//大小压缩，默认为大小压缩，适合普通很大的图
+                image.compressStyle = UMImage.CompressStyle.QUALITY;//质量压缩，适合长图的分享压缩格式设置
+                new ShareAction((Activity) context)
+                        .withText("hello")
+                        .setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.WEIXIN)
+                        .withMedia(image)
+                        .setCallback(shareListener)
+                        .open();
+
+
+            }
+        });
 
 
 
@@ -264,4 +301,44 @@ public class MyJokesAdapter extends RecyclerView.Adapter<MyJokesAdapter.MyViewHo
     public interface  OnItemlongClickListener{
         void onitemLongClick(View view, int position);
     }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Toast.makeText(context,"成功了",Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(context,"失败"+t.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(context,"取消了",Toast.LENGTH_LONG).show();
+
+        }
+    };
 }

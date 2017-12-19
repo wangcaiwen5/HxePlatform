@@ -20,7 +20,7 @@ import com.allenliu.versionchecklib.core.AllenChecker;
 import com.allenliu.versionchecklib.core.VersionParams;
 import com.bwie.uploadpicture.clearcache.ClearCacheUtils;
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.entity.UpdateEntity;
@@ -52,7 +52,7 @@ import okhttp3.ResponseBody;
 
 public class SettingActivity extends BaseActivity<UpdatePresenter> implements View.OnClickListener,UpdateView{
 
-    public static SettingActivity activity;
+
     @BindView(R.id.mSettingToolbar)
     MyToolBar mSettingToolbar;
     @BindView(R.id.rl_query_update)
@@ -198,7 +198,6 @@ public class SettingActivity extends BaseActivity<UpdatePresenter> implements Vi
                         .setService(VersionUpdateService.class);
                 AllenChecker.startVersionCheck(this, builder.build());
                 AllenChecker.init(true);
-                activity=this;
                 break;
 
             case R.id.bt_exit_login:

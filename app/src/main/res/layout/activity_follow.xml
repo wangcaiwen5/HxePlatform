@@ -14,19 +14,10 @@
     </com.hxe.hxeplatform.myview.MyToolBar>
 
 
-    <RelativeLayout
-        android:padding="@dimen/y10"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_follow_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
-        <com.bwie.uploadpicture.view.CircleImageView
-            android:layout_width="@dimen/x100"
-            android:layout_height="@dimen/y100"
-            android:src="@mipmap/logo1"
-            />
-
-
-
-    </RelativeLayout>
 
 </LinearLayout>

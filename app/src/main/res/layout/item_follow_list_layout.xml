@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/recyclerview_item"
+    android:clickable="true"
+    android:layout_height="wrap_content">
+
+    <com.bwie.uploadpicture.view.CircleImageView
+        android:id="@+id/iv_follow_headImg"
+        android:layout_centerVertical="true"
+        android:layout_width="@dimen/x100"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_height="@dimen/y100"
+        android:src="@mipmap/logo1"
+        />
+
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_marginLeft="@dimen/x20"
+       android:layout_centerVertical="true"
+       android:layout_toRightOf="@+id/iv_follow_headImg"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+
+       <TextView
+           android:id="@+id/tv_follow_nikeName"
+           android:text="昵称"
+           android:maxLength="8"
+           android:textSize="@dimen/x30"
+           android:textColor="@color/black"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+
+       <TextView
+           android:id="@+id/tv_follow_message"
+           android:layout_centerVertical="true"
+           android:text="快快快戳我,快快快戳我,快快快戳我,快快快戳我"
+           android:textSize="@dimen/y20"
+           android:maxEms="12"
+           android:maxLines="1"
+           android:ellipsize="end"
+           android:textColor="@color/textColor_666"
+           android:layout_marginLeft="@dimen/x30"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+
+           />
+
+   </LinearLayout>
+
+
+    <Button
+        android:background="@null"
+        android:id="@+id/tv_follow_time"
+        android:clickable="false"
+        android:drawablePadding="@dimen/x20"
+        android:paddingRight="@dimen/x20"
+        android:drawableRight="@mipmap/enter"
+        android:textSize="@dimen/x20"
+        android:textColor="@color/textColor_666"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text="2017-12-16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+    android:layout_below="@id/tv_follow_time"
+    android:background="@color/colorLineNarrow"
+    android:layout_marginTop="@dimen/x10"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y1"/>
+
+
+
+</RelativeLayout>

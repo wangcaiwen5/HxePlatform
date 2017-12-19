@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 
 /**
  * Time:2017/10/2 22:21

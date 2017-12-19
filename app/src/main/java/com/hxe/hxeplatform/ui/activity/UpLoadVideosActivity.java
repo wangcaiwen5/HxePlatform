@@ -18,7 +18,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.FullyGridLayoutManager;
 import com.hxe.hxeplatform.adapter.GridVideoAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;

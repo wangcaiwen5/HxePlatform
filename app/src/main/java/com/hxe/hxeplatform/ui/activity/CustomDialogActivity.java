@@ -51,7 +51,7 @@ public class CustomDialogActivity extends VersionDialogActivity implements APKDo
             //我这里为了方便直接关闭当前activity
             //在你的项目是关闭所有界面
             finish();
-            SettingActivity.activity.finish();
+           // SettingActivity.activity.finish();
         }
     }
 }

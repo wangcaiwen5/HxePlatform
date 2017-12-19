@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.FullyGridLayoutManager;
 import com.hxe.hxeplatform.adapter.GridImageAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;

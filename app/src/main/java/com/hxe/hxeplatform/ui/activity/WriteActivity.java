@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.base.BasePresenter;
 import com.hxe.hxeplatform.myview.MyToolBar;

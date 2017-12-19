@@ -222,16 +222,22 @@
             />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_comments"
+    <TextView
+        android:id="@+id/tv_comment1"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginRight="@dimen/x30"
         android:layout_below="@+id/app_video_box"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
+        android:layout_height="wrap_content"></TextView>
+    <TextView
+        android:id="@+id/tv_comment2"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_below="@+id/tv_comment1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></TextView>
     <View
-        android:layout_below="@+id/rv_comments"
+        android:layout_below="@+id/tv_comment2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x5"
         android:layout_marginTop="@dimen/x10"

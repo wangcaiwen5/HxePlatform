@@ -10,6 +10,7 @@ import com.hxe.hxeplatform.rxretrofit.common.BaseApi;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -20,9 +21,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import retrofit2.Retrofit;
@@ -81,8 +86,13 @@ public class RetrofitManager {
                 .connectTimeout(60*5, TimeUnit.SECONDS)//链接超时
                 .writeTimeout(30, TimeUnit.SECONDS)// 设置写入超时时间
                 .readTimeout(30, TimeUnit.SECONDS)// 设置读取数据超时时间
-                 .cache(cache)
+                .cache(cache)
                 .build();
+
+
+        okHttpClient.newCall(null);
+
+
 
         retrofit=new Retrofit.Builder()
                 .client(okHttpClient)

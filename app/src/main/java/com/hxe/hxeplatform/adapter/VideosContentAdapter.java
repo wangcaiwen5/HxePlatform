@@ -5,11 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.hxe.hxeplatform.R;
-import com.hxe.hxeplatform.entity.GetVediosListEntity;
 import com.hxe.hxeplatform.entity.HotVideoEntity;
-
+import com.onetime.platform.R;
 import java.util.List;
 
 /**

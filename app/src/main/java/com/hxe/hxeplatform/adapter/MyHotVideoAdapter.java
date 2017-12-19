@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bwie.uploadpicture.view.CircleImageView;
-import com.hxe.hxeplatform.R;
+
 import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.entity.GetVediosListEntity;
 import com.hxe.hxeplatform.entity.HotVideoEntity;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import com.onetime.platform.R;
 import cn.jzvd.JZVideoPlayerStandard;
 import okhttp3.ResponseBody;
 

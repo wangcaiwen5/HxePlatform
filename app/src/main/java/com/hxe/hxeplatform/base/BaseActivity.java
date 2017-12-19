@@ -14,7 +14,7 @@ import android.view.WindowManager;
 
 import com.allenliu.versionchecklib.core.AllenChecker;
 import com.allenliu.versionchecklib.core.VersionParams;
-import com.hxe.hxeplatform.R;
+
 import com.hxe.hxeplatform.rxretrofit.common.Api;
 import com.hxe.hxeplatform.rxretrofit.common.BaseApi;
 import com.hxe.hxeplatform.rxretrofit.http.VersionUpdateService;

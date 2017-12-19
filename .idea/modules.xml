@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HxePlatform.iml" filepath="$PROJECT_DIR$/HxePlatform.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dialogutils/dialogutils.iml" filepath="$PROJECT_DIR$/dialogutils/dialogutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/uploadpicture/uploadpicture.iml" filepath="$PROJECT_DIR$/uploadpicture/uploadpicture.iml" />
     </modules>
   </component>

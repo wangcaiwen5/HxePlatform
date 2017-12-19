@@ -10,7 +10,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bwie.uploadpicture.view.CircleImageView;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.MyLeftAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;
 import com.hxe.hxeplatform.base.BasePresenter;

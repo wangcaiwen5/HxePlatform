@@ -1,1 +1,1 @@
-include ':app', ':uploadpicture'
+include ':app', ':uploadpicture', ':dialogutils'

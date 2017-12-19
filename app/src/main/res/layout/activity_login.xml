@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@mipmap/login_bg"
-    tools:context=".ui.activity.LoginActivity">
+    tools:context="com.hxe.hxeplatform.ui.activity.LoginActivity">
 
 <ImageView
     android:layout_centerHorizontal="true"

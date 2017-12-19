@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bwie.uploadpicture.view.CircleImageView;
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.base.BasePresenter;
 import com.hxe.hxeplatform.entity.UserInfoEntity;

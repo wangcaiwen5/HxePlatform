@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hxe.hxeplatform.ui.activity.UserCenterActivity">
+
+    <ImageView
+        android:src="@mipmap/write_bg"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x500">
+    </ImageView>
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/toolbar_padding_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x100"
+        android:id="@+id/relativeLayout">
+        <ImageView
+            android:id="@+id/iv_return"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x60"
+            android:src="@mipmap/return_next"
+            />
+
+        <TextView
+            android:id="@+id/tv_nickName"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="昵称"
+            android:layout_centerHorizontal="true"
+            />
+
+
+        <ImageView
+            android:id="@+id/iv_send_msg"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x60"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/iv_user_share"
+            android:layout_marginEnd="13dp"
+            android:layout_marginRight="13dp"
+            android:src="@mipmap/liaotain" />
+
+        <ImageView
+            android:id="@+id/iv_user_share"
+            android:src="@mipmap/fxsdfsd"
+            android:layout_marginRight="@dimen/x120"
+            android:layout_toLeftOf="@id/iv_send_msg"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/x60" />
+    </RelativeLayout>
+
+    <com.bwie.uploadpicture.view.CircleImageView
+        android:layout_width="@dimen/y150"
+        android:layout_height="@dimen/y150"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@mipmap/logo1"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginStart="@dimen/x70"
+        android:layout_marginTop="@dimen/x250" />
+
+</RelativeLayout>

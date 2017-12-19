@@ -1,19 +1,29 @@
 package com.hxe.hxeplatform.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.hxe.hxeplatform.ui.activity.MainActivity;
+import com.hxe.hxeplatform.utils.ShowToast;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.MyHotAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;
 import com.hxe.hxeplatform.base.BasePresenter;
@@ -37,6 +47,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import hxe.com.dialogutils.BottomDialog;
+import hxe.com.dialogutils.UpDialog;
 import okhttp3.ResponseBody;
 
 /**
@@ -56,6 +68,10 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
     private List<GetVediosListEntity.DataBean> data;
     private List<GetVediosListEntity.DataBean> newdata = new ArrayList<>();
     private LinearLayoutManager layoutManager;
+
+    private EditText mEditText;
+    private TextView mButton;
+
     @Override
     protected int getLayoutid() {
         return R.layout.fragment_hot_layout;
@@ -150,20 +166,29 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
                 ToastShow.getSingleton(getActivity()).showToast(msg);
             }
 
-            /**
-             * 视频推荐列表的点击事件
-             */
-            adapter.setOnItemClickListener(new MyHotAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    Bundle bundel = new Bundle();
-                    System.out.println("=============="+string);
-                    bundel.putString("videos",string);
-                    bundel.putInt("position",position-2);
-                    gotoActivity(VideoContentActivity.class,false,bundel);
-                }
-            });
+            if(adapter!=null){
+                /**
+                 * 视频推荐列表的点击事件
+                 */
+                adapter.setOnItemClickListener(new MyHotAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Bundle bundel = new Bundle();
+                        System.out.println("=============="+string);
+                        bundel.putString("videos",string);
+                        bundel.putInt("position",position-2);
+                        gotoActivity(VideoContentActivity.class,false,bundel);
+                    }
+                });
 
+                adapter.setContentClick(new MyHotAdapter.OnContentClickListener() {
+                    @Override
+                    public void onContentClick(View view, int position) {
+                        showCommentDialog();
+                    }
+                });
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -172,6 +197,66 @@ public class HotFragment extends BaseFragment<GetVideosListPresenter> implements
 
     }
 
+    /**
+     * 弹出评论dialog
+     */
+    private void showCommentDialog() {
+        BottomDialog.create(getFragmentManager())
+                .setLayoutRes(R.layout.dialog_comment_view)
+                .setViewListener(new BottomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View v) {
+                        initView(v);
+                    }
+                })
+                .setDimAmount(0.6f)
+                .setCancelOutside(false)
+                .setTag("comment")
+                .show();
+    }
+
+    private void initView(View v) {
+        mEditText =  v.findViewById(R.id.edit_text);
+        mEditText.setHintTextColor(getActivity().getResources().getColor(R.color.textColor_999));
+        mButton =  v.findViewById(R.id.comment_btn);
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    mButton.setBackgroundResource(R.drawable.dialog_send_btn);
+                    mButton.setEnabled(false);
+                } else {
+                    mButton.setBackgroundResource(R.drawable.dialog_send_btn_pressed);
+                    mButton.setEnabled(true);
+                }
+            }
+        });
+        mEditText.post(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mEditText, 0);
+            }
+        });
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowToast.showToast("评论:"+mEditText.getText().toString());
+
+            }
+        });
+
+    }
     @Override
     public void hideProgressBar() {
         hotProgress.setVisibility(View.GONE);

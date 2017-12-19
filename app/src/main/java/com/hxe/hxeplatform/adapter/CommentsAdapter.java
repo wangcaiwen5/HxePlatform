@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.entity.GetVediosListEntity;
 
 import java.util.List;
@@ -48,9 +48,15 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String nickname = data.get(position).user.nickname;
-        holder.tvName.setText(nickname);
+        System.out.println(data.size()+"评论列表");
+        System.out.println("列表"+position);
+       // System.out.println("==="+data.get(position).user.nickname);
+       // holder.tvName.setText(data.get(position).user.nickname+" ");
         holder.tvComments.setText(":"+comments.get(position).content);
+        if(position==3){
+            holder.tvName.setText("点击查看更多");
+            return;
+        }
     }
 
     @Override

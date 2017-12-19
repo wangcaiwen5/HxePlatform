@@ -1,12 +1,14 @@
 package com.hxe.hxeplatform.ui.activity;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.hxe.hxeplatform.utils.TelNumUtils;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.base.BaseApplication;
 import com.hxe.hxeplatform.entity.LoginEntity;
@@ -70,12 +72,25 @@ public class OtherLoginActivity extends BaseActivity<LoginPresenter> implements 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_login_bt:
+                /**
+                 * 验证手机号是否合法
+                 */
+                boolean chinaPhoneLegal = TelNumUtils.isChinaPhoneLegal(etUsername.getText().toString().trim());
+                if(chinaPhoneLegal){
+                    if (TextUtils.isEmpty(etPassword.getText().toString().trim())){
+                        etPassword.setError("密码不合法");
+                    }else{
+                        mPresenter.login(etUsername.getText().toString().trim(),etPassword.getText().toString().trim());
+                    }
 
+                }else{
+                    etUsername.setError("手机号不合法");
+                }
 
                 System.out.println("============="+etUsername.getText().toString()+"========"+etPassword.getText().toString().trim());
 
 
-                mPresenter.login(etUsername.getText().toString().trim(),etPassword.getText().toString().trim());
+
                 break;
 
             case R.id.tv_update_paw:

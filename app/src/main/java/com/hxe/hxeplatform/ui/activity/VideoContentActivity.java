@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.VideosContentAdapter;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.base.BasePresenter;
@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
 
 import static com.igexin.sdk.GTServiceManager.context;
@@ -50,7 +51,18 @@ public class VideoContentActivity extends BaseActivity {
     private void initView() {
     rvContentComments.setLayoutManager(new LinearLayoutManager(this));
     }
-
+    @Override
+    public void onBackPressed() {
+        if (JZVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JZVideoPlayer.releaseAllVideos();
+    }
     private void initData() {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();

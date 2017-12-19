@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.adapter.MyHotAdapter;
 import com.hxe.hxeplatform.adapter.MyJokesAdapter;
 import com.hxe.hxeplatform.base.BaseFragment;

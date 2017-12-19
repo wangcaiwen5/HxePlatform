@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.onetime.platform.R;
 
-import com.hxe.hxeplatform.R;
 import com.hxe.hxeplatform.entity.Item;
 
 import java.util.ArrayList;

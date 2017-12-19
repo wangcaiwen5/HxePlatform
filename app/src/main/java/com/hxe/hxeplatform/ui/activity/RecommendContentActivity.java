@@ -3,7 +3,7 @@ package com.hxe.hxeplatform.ui.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.hxe.hxeplatform.R;
+import com.onetime.platform.R;
 import com.hxe.hxeplatform.base.BaseActivity;
 import com.hxe.hxeplatform.base.BasePresenter;
 
